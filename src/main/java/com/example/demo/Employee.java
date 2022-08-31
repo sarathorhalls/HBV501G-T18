@@ -1,4 +1,10 @@
-import org.springframework.data.annotation.Id;
+package com.example.demo;
+
+import java.util.Objects;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
 public class Employee {
@@ -16,11 +22,11 @@ public class Employee {
     }
 
     @Override
-    public boolean Equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != 0.getClass()) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-		return Objects.equals(id, employee.id) &&
+		return Objects.equals(Id, employee.Id) &&
 			Objects.equals(firstName, employee.firstName) &&
 			Objects.equals(lastName, employee.lastName) &&
 			Objects.equals(description, employee.description);
