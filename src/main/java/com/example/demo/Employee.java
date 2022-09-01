@@ -36,6 +36,10 @@ public class Employee {
         return Id;
     }
 
+    public void setId(long Id) {
+        this.Id = Id;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -58,5 +62,15 @@ public class Employee {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "Id=" + Id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
