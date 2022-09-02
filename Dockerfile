@@ -1,8 +1,11 @@
 FROM maven:3.8.5-eclipse-temurin-17 AS build
-COPY src /usr/src/app/src
-COPY pom.xml /usr/src/app
-RUN mvn -f /usr/src/app/pom.xml verify --fail-never
-RUN mvn -f /usr/src/app/pom.xml package
+ENV HOME=/usr/src/app
+RUN mkdir -p $HOME
+WORKDIR $HOME
+ADD pom.xml $HOME
+RUN mvn verify --fail-never
+ADD . $HOME
+RUN mvn package
 
 FROM gcr.io/distroless/java
 COPY --from=build /usr/src/app/target/*.jar /usr/app/
