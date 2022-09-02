@@ -14,8 +14,5 @@
         "babel-loader": "^8.0.6",
         "webpack": "^4.41.0",
         "webpack-cli": "^3.3.0"
-    },
-    "scripts": {
-        "watch": "webpack --watch -d --output .target/classes/static/js/bundle.js"
     }
 }

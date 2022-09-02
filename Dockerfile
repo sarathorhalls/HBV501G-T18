@@ -4,6 +4,9 @@ RUN mkdir -p $HOME
 WORKDIR $HOME
 ADD pom.xml $HOME
 RUN mvn verify --fail-never
+RUN mvn frontend:install-node-and-npm
+RUN mvn frontend:npm
+RUN mvn frontend:webpack
 ADD . $HOME
 RUN mvn package
 

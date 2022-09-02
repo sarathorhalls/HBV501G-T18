@@ -6,8 +6,7 @@ module.exports = {
     cache: true,
     mode: "development",
     output: {
-        path: path.resolve(__dirname, "dist"),
-        publicPath: "/dist/",
+        path: __dirname,
         filename: "./src/main/resources/static/built/bundle.js",
     },
     module: {
