@@ -17,40 +17,31 @@ public class UserServiceImplementation implements UserService {
     @Autowired
     public UserServiceImplementation(UserRepository userRepository) {
         this.userRepository = userRepository;
-        /*this.userRepository.save(new User("testuser1", "testuser1", null, null));
-        this.userRepository.save(new User("testuser2", "testuser2", null, null));
-        this.userRepository.save(new User("testuser3", "testuser3", null, null));
-        this.userRepository.save(new User("testuser4", "testuser4", null, null));*/
     }
 
     @Override
     public void save(User user) {
-        // TODO Auto-generated method stub
-        
+        userRepository.save(user);
     }
 
     @Override
     public void delete(User user) {
-        // TODO Auto-generated method stub
-        
+        userRepository.delete(user);
     }
 
     @Override
     public User findById(long id) {
-        // TODO Auto-generated method stub
-        return null;
+        return userRepository.findById(id);
     }
 
     @Override
     public User findByUsername(String username) {
-        // TODO Auto-generated method stub
-        return null;
+        return userRepository.findByUsername(username);
     }
 
     @Override
     public List<User> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+        return userRepository.findAll();
     }
-    
+
 }

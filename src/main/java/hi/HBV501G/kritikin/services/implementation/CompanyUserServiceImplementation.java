@@ -17,40 +17,36 @@ public class CompanyUserServiceImplementation implements CompanyUserService {
     private final CompanyService companyService;
 
     @Autowired
-    public CompanyUserServiceImplementation(CompanyUserRepository companyUserRepository, CompanyService companyService) {
+    public CompanyUserServiceImplementation(CompanyUserRepository companyUserRepository,
+            CompanyService companyService) {
         this.companyUserRepository = companyUserRepository;
         this.companyService = companyService;
-        //this.companyUserRepository.save(new CompanyUser(companyService.findByName("TestCompany1"), "testcompanyuser1", "testcompanyuser1"));
     }
 
     @Override
     public void save(CompanyUser companyUser) {
-        // TODO Auto-generated method stub
-        
+        companyUserRepository.save(companyUser);
+
     }
 
     @Override
     public void delete(CompanyUser companyUser) {
-        // TODO Auto-generated method stub
-        
+        companyUserRepository.delete(companyUser);
     }
 
     @Override
     public CompanyUser findById(long id) {
-        // TODO Auto-generated method stub
-        return null;
+        return companyUserRepository.findById(id);
     }
 
     @Override
     public CompanyUser findByUsername(String username) {
-        // TODO Auto-generated method stub
-        return null;
+        return companyUserRepository.findByUsername(username);
     }
 
     @Override
     public List<CompanyUser> findAll() {
-        // TODO Auto-generated method stub
-        return null;
+        return companyUserRepository.findAll();
     }
-    
+
 }
