@@ -1,8 +1,9 @@
 ## Running
 
+Install Docker and Docker Compose["https://docs.docker.com/get-docker/"]
+
 ```bash
-docker build -t demo .
-docker run -p 8080:8080 -it demo:latest
+docker-compose up --build
 ```
 
 Open <http://localhost:8080/> in a web browser

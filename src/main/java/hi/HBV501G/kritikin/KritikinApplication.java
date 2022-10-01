@@ -1,13 +1,13 @@
-package com.example.demo;
+package hi.HBV501G.kritikin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DemoApplication {
+public class KritikinApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(KritikinApplication.class, args);
 	}
 
 }
