@@ -30,4 +30,4 @@ RUN mvn package
 
 #Run server side
 EXPOSE 8080
-#ENTRYPOINT ["java","-jar","/usr/src/app/target/kritikin-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","/usr/src/app/target/kritikin-0.0.1-SNAPSHOT.jar"]
