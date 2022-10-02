@@ -17,6 +17,12 @@ public class CompanyServiceImplementation implements CompanyService {
     @Autowired
     public CompanyServiceImplementation(CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
+
+        // this.save(new Company("Test", 5.0, "www.test.com", 1234567, "Test
+        // description", "Test address", "Test opening hours"));
+        // this.save(new Company("Test2", 4.0, "www.test2.com", 1234567, "Test2
+        // description", "Test2 address", "Test2 opening hours"));
+
     }
 
     @Override

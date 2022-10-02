@@ -28,9 +28,11 @@ public class Company {
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private List<Question> questions = new ArrayList<>();
 
-    public Company() {}
+    public Company() {
+    }
 
-    public Company(String name, Double starRating, String website, int phoneNumber, String description, String address, String openingHours, List<Review> reviews, List<Question> questions) {
+    public Company(String name, Double starRating, String website, int phoneNumber, String description, String address,
+            String openingHours) {
         this.name = name;
         this.starRating = starRating;
         this.website = website;
@@ -38,12 +40,22 @@ public class Company {
         this.description = description;
         this.address = address;
         this.openingHours = openingHours;
-        this.reviews = reviews;
-        this.questions = questions;
+        reviews = null;
+        questions = null;
+    }
+
+    public Company(String name) {
+        this.name = name;
+        reviews = null;
+        questions = null;
     }
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -118,5 +130,4 @@ public class Company {
         this.questions = questions;
     }
 
-    
 }
