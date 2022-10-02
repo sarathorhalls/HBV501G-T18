@@ -28,7 +28,7 @@ public class HomeController {
         this.companyService = companyService;
     }
 
-    @RequestMapping(value = {"/", "/business/*"})
+    @RequestMapping(value = {"/", "/company/*"})
     public String index() {
         return "index";
     }
