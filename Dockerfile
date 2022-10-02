@@ -22,7 +22,7 @@ RUN mvn verify --fail-never
 #Copy rest of files
 ADD . $HOME
 
-#build client side (not work)
+#build client side
 RUN npx webpack
 
 #build server side
