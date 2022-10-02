@@ -8,7 +8,7 @@ public class HomeController {
 
     public static final String APIURL = "/api";
 
-    @RequestMapping("/")
+    @RequestMapping(value = { "/", "/company/*" })
     public String index() {
         return "index";
     }
