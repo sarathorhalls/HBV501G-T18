@@ -1,10 +1,18 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import Axios from "axios";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 const api = Axios.create({
     baseURL: "http://localhost:8080/api",
 });
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <div>Hello world</div>  // replace with root element
+    }
+]);
 
 class App extends Component {
     state = {
@@ -35,15 +43,9 @@ class App extends Component {
 
     render() {
         return (
-            <div>
-                {this.state.companies.map((company) => (
-                    <div key={company.id}>
-                        <h2>{company.name}</h2>
-                        <button onClick={() => this.deleteCompany(company.id)}>X</button>
-                    </div>
-                ))}
-                <button onClick={this.createCompany}>Create Company</button>
-            </div>
+            <React.StrictMode>
+                <RouterProvider router={router} />
+            </React.StrictMode>
         );
     }
 }
