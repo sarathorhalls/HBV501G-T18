@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hi.HBV501G.kritikin.persistence.entites.Company;
+import hi.HBV501G.kritikin.persistence.entites.Question;
+import hi.HBV501G.kritikin.persistence.entites.Review;
 import hi.HBV501G.kritikin.persistence.repositories.CompanyRepository;
 import hi.HBV501G.kritikin.services.CompanyService;
 
@@ -33,6 +35,16 @@ public class CompanyServiceImplementation implements CompanyService {
     @Override
     public void delete(Company company) {
         companyRepository.delete(company);
+    }
+
+    @Override
+    public Review addReview(Review review, long userId, long companyId) {
+        return null;
+    }
+
+    @Override
+    public Question addQuestion(Question question, long userId, long companyId) {
+        return null;
     }
 
     @Override
