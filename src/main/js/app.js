@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 import Axios from "axios";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
@@ -77,17 +77,6 @@ export default function App() {
             <RouterProvider router={router} />
         </React.StrictMode>
     );
-}
-
-class SearchBar extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { term: "" };
-    }
-
-    render() {
-        return <div>a</div>;
-    }
 }
 
 const container = document.getElementById("react");
