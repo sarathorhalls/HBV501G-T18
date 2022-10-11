@@ -28,52 +28,56 @@ export default function App() {
     const [loggedIn, setLoggedIn] = useState(false);
     const [username, setUsername] = useState("janedoe");
 
-    return (
-        <React.StrictMode>
-            <CssBaseline />
-            <AppBar position="sticky">
-                <Toolbar>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        sx={{ flexGrow: 1 }}
-                    >
-                        Krítíkin
-                    </Typography>
-                    <TextField
-                        id="search"
-                        label="Search…"
-                        variant="standard"
-                        // TODO: fix color
-                        sx={{ flexGrow: 1 }}
-                    />
-                    <Box sx={{ flexGrow: 1 }} />
-                    <Box>
-                        {loggedIn ? (
+    const appToolbar = (
+        <AppBar position="sticky">
+            <Toolbar>
+                <Typography
+                    variant="h6"
+                    noWrap
+                    sx={{ flexGrow: 1 }}
+                >
+                    Krítíkin
+                </Typography>
+                <TextField
+                    id="search"
+                    label="Search…"
+                    variant="standard"
+                    // TODO: fix color
+                    sx={{ flexGrow: 1 }}
+                />
+                <Box sx={{ flexGrow: 1 }} />
+                <Box>
+                    {loggedIn ? (
+                        <Button
+                            variant="text"
+                            color="inherit"
+                            onClick={() => setLoggedIn(false)}
+                        >
+                            Log out {username}
+                        </Button>
+                    ) : (
+                        <>
                             <Button
                                 variant="text"
                                 color="inherit"
-                                onClick={() => setLoggedIn(false)}
-                            >
-                                Log out {username}
-                            </Button>
-                        ) : (
-                            <>
-                                <Button
-                                    variant="text"
-                                    color="inherit"
-                                    onClick={() => setLoggedIn(true)}
-                                >Log in</Button>
-                                <Button
-                                    variant="text"
-                                    color="inherit"
-                                    onClick={() => window.alert("Pressed sign up")}
-                                >Sign up</Button>
-                            </>
-                        )}
-                    </Box>
-                </Toolbar>
-            </AppBar>
+                                onClick={() => setLoggedIn(true)}
+                            >Log in</Button>
+                            <Button
+                                variant="text"
+                                color="inherit"
+                                onClick={() => window.alert("Pressed sign up")}
+                            >Sign up</Button>
+                        </>
+                    )}
+                </Box>
+            </Toolbar>
+        </AppBar>
+    );
+
+    return (
+        <React.StrictMode>
+            <CssBaseline />
+            { appToolbar }
             <RouterProvider router={router} />
         </React.StrictMode>
     );
