@@ -1,7 +1,15 @@
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
+import React, { Component, useState } from "react";
+import { createRoot } from "react-dom/client";
 import Axios from "axios";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Root, ErrorPage } from "./routes";
+import CssBaseline from "@mui/material/CssBaseline";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 
 const api = Axios.create({
     baseURL: "http://localhost:8080/api",
@@ -10,44 +18,65 @@ const api = Axios.create({
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <div>Hello world</div>  // replace with root element
+        element: <Root />,
+        errorElement: <ErrorPage />
     }
 ]);
 
-class App extends Component {
-    state = {
-        companies: [],
-    };
+export default function App() {
+    // TODO: implement actual authentication
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [username, setUsername] = useState("janedoe");
 
-    constructor() {
-        super();
-        this.loadCompanies();
-    }
-
-    loadCompanies = async () => {
-        let data = await api.get("/companies").then(({ data }) => data);
-        this.setState({ companies: data });
-    };
-
-    createCompany = async () => {
-        let response = await api.post("/companies", { name: "New Company" });
-        console.log(response);
-        this.loadCompanies();
-    };
-
-    deleteCompany = async (id) => {
-        let response = await api.delete("/company/" + id);
-        console.log(response);
-        this.loadCompanies();
-    };
-
-    render() {
-        return (
-            <React.StrictMode>
-                <RouterProvider router={router} />
-            </React.StrictMode>
-        );
-    }
+    return (
+        <React.StrictMode>
+            <CssBaseline />
+            <AppBar position="sticky">
+                <Toolbar>
+                    <Typography
+                        variant="h6"
+                        noWrap
+                        sx={{ flexGrow: 1 }}
+                    >
+                        Krítíkin
+                    </Typography>
+                    <TextField
+                        id="search"
+                        label="Search…"
+                        variant="standard"
+                        // TODO: fix color
+                        sx={{ flexGrow: 1 }}
+                    />
+                    <Box sx={{ flexGrow: 1 }} />
+                    <Box>
+                        {loggedIn ? (
+                            <Button
+                                variant="text"
+                                color="inherit"
+                                onClick={() => setLoggedIn(false)}
+                            >
+                                Log out {username}
+                            </Button>
+                        ) : (
+                            <>
+                                <Button
+                                    variant="text"
+                                    color="inherit"
+                                    onClick={() => setLoggedIn(true)}
+                                >Log in</Button>
+                                <Button
+                                    variant="text"
+                                    color="inherit"
+                                    onClick={() => window.alert("Pressed sign up")}
+                                >Sign up</Button>
+                            </>
+                        )}
+                    </Box>
+                </Toolbar>
+            </AppBar>
+            <RouterProvider router={router} />
+        </React.StrictMode>
+    );
 }
 
 class SearchBar extends Component {
@@ -61,4 +90,6 @@ class SearchBar extends Component {
     }
 }
 
-ReactDOM.render(<App />, document.getElementById("react"));
+const container = document.getElementById("react");
+const root = createRoot(container);
+root.render(<App />);
