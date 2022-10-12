@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 import Axios from "axios";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Root, ErrorPage } from "./routes";
+import { Root, ErrorPage, Company } from "./routes";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -21,6 +21,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <Root />,
         errorElement: <ErrorPage />
+    },
+    {
+        path: "/company/:id",
+        element: <Company />
     }
 ]);
 
