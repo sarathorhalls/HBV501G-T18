@@ -4,9 +4,9 @@ import TextField from "@mui/material/TextField";
 
 export default function Root() {
     return (
-        <Container maxWidth="sm">
+        <Container maxWidth="lg">
             <TextField
-                id="search"
+                id="body-search"
                 label="Search"
                 variant="filled"
                 onKeyPress={(e) => {
