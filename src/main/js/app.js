@@ -24,7 +24,8 @@ const router = createBrowserRouter([
     },
     {
         path: "/company/:id",
-        element: <Company />
+        element: <Company api={api} />
+        // TODO: define errorElement for not found
     }
 ]);
 
