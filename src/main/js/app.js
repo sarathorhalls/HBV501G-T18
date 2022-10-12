@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
 
 const api = Axios.create({
     baseURL: "http://localhost:8080/api",
@@ -36,7 +37,13 @@ export default function App() {
                     noWrap
                     sx={{ flexGrow: 1 }}
                 >
-                    Krítíkin
+                    <Link
+                        href="/"
+                        color="inherit"
+                        underline="none"
+                    >
+                        Krítíkin
+                    </Link>
                 </Typography>
                 <TextField
                     id="search"
