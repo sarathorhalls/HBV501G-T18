@@ -59,28 +59,31 @@ export default function App() {
                 />
                 <Box sx={{ flexGrow: 1 }} />
                 <Box>
-                    {loggedIn ? (
-                        <Button
-                            variant="text"
-                            color="inherit"
-                            onClick={() => setLoggedIn(false)}
-                        >
-                            Log out {username}
-                        </Button>
-                    ) : (
-                        <>
+                    {loggedIn
+                        ? (
                             <Button
                                 variant="text"
                                 color="inherit"
-                                onClick={() => setLoggedIn(true)}
-                            >Log in</Button>
-                            <Button
-                                variant="text"
-                                color="inherit"
-                                onClick={() => window.alert("Pressed sign up")}
-                            >Sign up</Button>
-                        </>
-                    )}
+                                onClick={() => setLoggedIn(false)}
+                            >
+                                Log out {username}
+                            </Button>
+                        )
+                        : (
+                            <>
+                                <Button
+                                    variant="text"
+                                    color="inherit"
+                                    onClick={() => setLoggedIn(true)}
+                                >Log in</Button>
+                                <Button
+                                    variant="text"
+                                    color="inherit"
+                                    onClick={() => window.alert("Pressed sign up")}
+                                >Sign up</Button>
+                            </>
+                        )
+                    }
                 </Box>
             </Toolbar>
         </AppBar>
