@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import hi.HBV501G.kritikin.persistence.entites.Company;
@@ -26,7 +25,7 @@ public class CompanyController {
     }
 
     @GetMapping(value = HomeController.APIURL + "/company/{id}")
-    public @ResponseBody Company company(@RequestParam long id) {
+    public @ResponseBody Company company(@PathVariable long id) {
         return companyService.findById(id);
     }
 
