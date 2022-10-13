@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { useParams } from "react-router-dom";
@@ -8,35 +8,47 @@ export default function Company(props) {
     const [company, setCompany] = useState(null);
 
     async function loadCompany() {
+        /**
+         * Loads the company with the current specified ID and sets the state
+         */
         const response = await props.api.get(`/company/${id}`);
-        const data = JSON.parse(response.data);
-        setCompany(data);
+        setCompany(response.data);
+        // TODO: throw error if nothing found
     }
 
-    loadCompany();
+    // Load company when component loads
+    useEffect(() => {
+        loadCompany();
+    }, []);
 
     return (
         <Container maxWidth="lg">
             <Typography
                 variant="h2"
             >
-                {JSON.stringify(company)}
+                {company ? company.name : 'Loading…'}
             </Typography>
             <Typography
                 variant="body1"
             >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                {company ? company.description : 'Loading…'}
             </Typography>
             <Typography
                 variant="h3"
             >
                 Reviews
             </Typography>
+            <div>
+                {company ? JSON.stringify(company.reviews) : 'Loading…'}
+            </div>
             <Typography
                 variant="h3"
             >
                 Questions
             </Typography>
+            <div>
+                {company ? JSON.stringify(company.questions) : 'Loading…'}
+            </div>
         </Container>
     );
 }
