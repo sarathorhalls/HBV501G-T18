@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import CircularProgress from "@mui/material/CircularProgress";
 import { useParams } from "react-router-dom";
 
 export default function Company(props) {
@@ -23,32 +24,45 @@ export default function Company(props) {
 
     return (
         <Container maxWidth="lg">
-            <Typography
-                variant="h2"
-            >
-                {company ? company.name : 'Loading…'}
-            </Typography>
-            <Typography
-                variant="body1"
-            >
-                {company ? company.description : 'Loading…'}
-            </Typography>
-            <Typography
-                variant="h3"
-            >
-                Reviews
-            </Typography>
-            <div>
-                {company ? JSON.stringify(company.reviews) : 'Loading…'}
-            </div>
-            <Typography
-                variant="h3"
-            >
-                Questions
-            </Typography>
-            <div>
-                {company ? JSON.stringify(company.questions) : 'Loading…'}
-            </div>
+            {company
+                ? (
+                    <>
+                        <Typography
+                            variant="h2"
+                        >
+                            {company.name}
+                        </Typography>
+                        <Typography
+                            variant="body1"
+                        >
+                            {company.description}
+                        </Typography>
+                        <Typography
+                            variant="h3"
+                        >
+                            Reviews
+                        </Typography>
+                        <div>
+                            {JSON.stringify(company.reviews)}
+                        </div>
+                        <Typography
+                            variant="h3"
+                        >
+                            Questions
+                        </Typography>
+                        <div>
+                            {JSON.stringify(company.questions)}
+                        </div>
+                    </>
+                )
+                : (
+                    <Typography
+                        variant="body1"
+                    >
+                        <CircularProgress />
+                    </Typography>
+                )
+            }
         </Container>
     );
 }
