@@ -9,6 +9,7 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import BusinessIcon from '@mui/icons-material/Business';
 import { useParams } from "react-router-dom";
+import { StarRating } from "../components";
 
 export default function Company(props) {
     const { id } = useParams();
@@ -67,6 +68,9 @@ export default function Company(props) {
                                 target="_blank"
                                 clickable
                                 // TODO: add aria-label or similar
+                            />
+                            <StarRating
+                                rating={company.starRating}
                             />
                         </Box>
                         <Typography
