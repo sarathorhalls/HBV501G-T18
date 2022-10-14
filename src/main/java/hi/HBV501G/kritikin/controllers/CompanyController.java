@@ -26,7 +26,7 @@ public class CompanyController {
     }
 
     @GetMapping(value = HomeController.APIURL + "/company/{id}")
-    public @ResponseBody Company company(@RequestParam long id) {
+    public @ResponseBody Company company(@PathVariable long id) {
         return companyService.findById(id);
     }
 

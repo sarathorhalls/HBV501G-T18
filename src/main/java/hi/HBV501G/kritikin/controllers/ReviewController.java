@@ -38,7 +38,7 @@ public class ReviewController {
      */
     @GetMapping(value = HomeController.APIURL + "/company/{id}/reviews")
     public List<Review> fetchReviewsByCompany(@PathVariable long id) {
-        return companyService.findById(id).getReviews();
+        return companyService.getReviews(id);
     }
 
     /**
@@ -48,11 +48,11 @@ public class ReviewController {
      */
     @GetMapping(value = HomeController.APIURL + "/user/{id}/reviews")
     public List<Review> fetchReviewsByUser(@PathVariable long id) {
-        return userService.findById(id).getReviews();
+        return userService.getReviews(id);
     }
 
     @PostMapping(value = HomeController.APIURL + "/company/{id}/review")
-    public Review updateReview(@RequestBody Review review, @RequestParam long userId, @PathVariable("id") long companyId) {
+    public Review addReview(@RequestBody Review review, @RequestParam long userId, @PathVariable("id") long companyId) {
         return companyService.addReview(review, userId, companyId);
     }
 }

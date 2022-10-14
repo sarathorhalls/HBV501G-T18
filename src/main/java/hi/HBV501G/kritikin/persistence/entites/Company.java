@@ -50,6 +50,16 @@ public class Company {
         questions = null;
     }
 
+    public Review addReview(Review review) {
+        reviews.add(review);
+        return review;
+    }
+
+    public Question addQuestion(Question question) {
+        questions.add(question);
+        return question;
+    }
+
     public long getId() {
         return id;
     }

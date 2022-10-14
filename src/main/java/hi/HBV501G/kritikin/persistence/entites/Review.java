@@ -35,6 +35,11 @@ public class Review {
         this.reviewText = reviewText;
     }
 
+    public Review(Double starRating, String reviewText) {
+        this.starRating = starRating;
+        this.reviewText = reviewText;
+    }
+
     public long getId() {
         return id;
     }

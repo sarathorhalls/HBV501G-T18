@@ -14,4 +14,6 @@ public interface CompanyService {
     public List<Company> findAll();
     public Review addReview(Review review, long userId, long companyId);
     public Question addQuestion(Question question, long userId, long companyId);
+    public List<Review> getReviews(long companyId);
+    public List<Question> getQuestions(long companyId);
 }
