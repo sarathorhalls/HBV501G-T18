@@ -19,7 +19,7 @@ public class ReviewController {
 
     /**
      * Constructor for ReviewController which uses autowired to inject the
-     * CompanyService, ReviewService and UserService from JPA
+     * ReviewService with JPA
      * 
      * @param reviewService
      */
