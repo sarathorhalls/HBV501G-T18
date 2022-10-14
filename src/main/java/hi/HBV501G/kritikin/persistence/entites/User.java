@@ -3,11 +3,14 @@ package hi.HBV501G.kritikin.persistence.entites;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "users")
@@ -19,13 +22,16 @@ public class User {
     private String username;
     private String password;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "user-review")
     private List<Review> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "user-question")
     private List<Question> questions = new ArrayList<>();
 
-    public User() {}
+    public User() {
+    }
 
     public User(String username, String password) {
         this.username = username;
@@ -85,5 +91,4 @@ public class User {
         this.questions = questions;
     }
 
-    
 }
