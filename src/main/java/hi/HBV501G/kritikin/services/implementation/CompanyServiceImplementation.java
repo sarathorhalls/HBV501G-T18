@@ -18,8 +18,10 @@ public class CompanyServiceImplementation implements CompanyService {
     public CompanyServiceImplementation(CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
 
-        //this.save(new Company("Test", 5.0, "www.test.com", 1234567, "Test description", "Test address", "Test opening hours"));
-        //this.save(new Company("Test2", 4.0, "www.test2.com", 1234567, "Test2 description", "Test2 address", "Test2 opening hours"));
+        // this.save(new Company("Test", 5.0, "www.test.com", 1234567, "Test
+        // description", "Test address", "Test opening hours"));
+        // this.save(new Company("Test2", 4.0, "www.test2.com", 1234567, "Test2
+        // description", "Test2 address", "Test2 opening hours"));
 
     }
 
@@ -46,5 +48,10 @@ public class CompanyServiceImplementation implements CompanyService {
     @Override
     public List<Company> findAll() {
         return companyRepository.findAll();
+    }
+
+    @Override
+    public Company getReferenceById(long id) {
+        return companyRepository.getReferenceById(id);
     }
 }

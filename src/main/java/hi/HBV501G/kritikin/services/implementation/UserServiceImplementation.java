@@ -18,8 +18,8 @@ public class UserServiceImplementation implements UserService {
     public UserServiceImplementation(UserRepository userRepository) {
         this.userRepository = userRepository;
 
-        //this.save(new User("Test", "password"));
-        //this.save(new User("Test2", "password"));
+        // this.save(new User("Test", "password"));
+        // this.save(new User("Test2", "password"));
     }
 
     @Override
@@ -45,5 +45,10 @@ public class UserServiceImplementation implements UserService {
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public User getReferenceById(long id) {
+        return userRepository.getReferenceById(id);
     }
 }
