@@ -2,6 +2,12 @@ import React, { useState, useEffect } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
+import Chip from "@mui/material/Chip";
+import Box from "@mui/material/Box";
+import WebIcon from '@mui/icons-material/Web';
+import PhoneIcon from '@mui/icons-material/Phone';
+import ScheduleIcon from '@mui/icons-material/Schedule';
+import BusinessIcon from '@mui/icons-material/Business';
 import { useParams } from "react-router-dom";
 
 export default function Company(props) {
@@ -32,6 +38,37 @@ export default function Company(props) {
                         >
                             {company.name}
                         </Typography>
+                        <Box>
+                            <Chip
+                                icon={<WebIcon />}
+                                label="Vefur"
+                                component="a"
+                                href={company.website}
+                                target="_blank"
+                                clickable
+                            />
+                            <Chip
+                                icon={<PhoneIcon />}
+                                label={company.phoneNumber}
+                                component="a"
+                                href={`tel:${company.phoneNumber}`}
+                                clickable
+                                // TODO: add aria-label or similar
+                            />
+                            <Chip
+                                icon={<ScheduleIcon />}
+                                label={company.openingHours}
+                            />
+                            <Chip
+                                icon={<BusinessIcon />}
+                                label={company.address}
+                                component="a"
+                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURI(company.address)}`}
+                                target="_blank"
+                                clickable
+                                // TODO: add aria-label or similar
+                            />
+                        </Box>
                         <Typography
                             variant="body1"
                         >
