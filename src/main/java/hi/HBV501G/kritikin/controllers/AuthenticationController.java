@@ -16,20 +16,43 @@ import hi.HBV501G.kritikin.services.UserService;
 
 @RestController
 public class AuthenticationController {
+    // TODO: use actual authentication
+
     UserService userService;
     CompanyUserService companyUserService;
 
+    /**
+     * Constructor for the AuthenticationController which uses Autowired to inject
+     * the UserService and CompanyUserService from JPA
+     * 
+     * @param userService
+     * @param companyUserService
+     */
     @Autowired
     public AuthenticationController(UserService userService, CompanyUserService companyUserService) {
         this.userService = userService;
         this.companyUserService = companyUserService;
     }
 
+    /**
+     * Returns a list of all users as a json object from a get request to /api/users
+     * .
+     * 
+     * @return a list of all users
+     */
     @GetMapping(value = HomeController.APIURL + "/users")
     public List<User> fetchAllUsers() {
         return userService.findAll();
     }
 
+    /**
+     * Adds a user to the database from a post request to /api/users with the user
+     * to be inserted in the body.
+     * 
+     * @param user the user to be inserted, fetched from the body of the post
+     *             request
+     * @return the user that was inserted
+     */
     @PostMapping(value = HomeController.APIURL + "/users")
     public User addUser(@RequestBody User user) {
         if (user == null || user.getUsername() == null || user.getUsername().equals("")) {
@@ -42,6 +65,12 @@ public class AuthenticationController {
         return user;
     }
 
+    /**
+     * Deletes a user from the database from a delete request to /api/users/{id} .
+     * 
+     * @param id the id of the user to be deleted
+     * @return the user that was deleted
+     */
     @DeleteMapping(value = HomeController.APIURL + "/users/{id}")
     public User deleteUser(@PathVariable long id) {
         User user = userService.findById(id);
