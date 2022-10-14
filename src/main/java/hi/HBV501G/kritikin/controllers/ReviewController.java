@@ -51,7 +51,7 @@ public class ReviewController {
         return userService.getReviews(id);
     }
 
-    @PostMapping(value = HomeController.APIURL + "/company/{id}/review")
+    @PostMapping(value = HomeController.APIURL + "/company/{id}/reviews")
     public Review addReview(@RequestBody Review review, @RequestParam long userId, @PathVariable("id") long companyId) {
         return companyService.addReview(review, userId, companyId);
     }
