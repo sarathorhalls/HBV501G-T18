@@ -11,33 +11,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hi.HBV501G.kritikin.persistence.entites.Review;
-import hi.HBV501G.kritikin.services.CompanyService;
 import hi.HBV501G.kritikin.services.ReviewService;
-import hi.HBV501G.kritikin.services.UserService;
 
 @RestController
 public class ReviewController {
-    CompanyService companyService;
     ReviewService reviewService;
-    UserService userService;
 
     /**
      * Constructor for ReviewController which uses autowired to inject the
-     * CompanyService and UserService from JPA
+     * CompanyService, ReviewService and UserService from JPA
      * 
-     * @param companyService
-     * @param userService
-     * @param reviewController
+     * @param reviewService
      */
     @Autowired
-    public ReviewController(CompanyService companyService, UserService userService, ReviewService reviewService) {
-        this.companyService = companyService;
-        this.userService = userService;
+    public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
     }
 
     /**
-     * Returns a list of all reviews for a particular company with the given id
+     * Returns a list of all reviews as a json object for a particular company with
+     * the given id from a get request to /api/company/{id}/reviews .
      * 
      * @param id the id of the company
      * @return a list of all reviews for a particular company
@@ -48,7 +41,8 @@ public class ReviewController {
     }
 
     /**
-     * Returns a list of all reviews for a particular user with the given id
+     * Returns a list of all reviews as a json object for a particular user with the
+     * given id from a get request to /api/user/{id}/reviews .
      * 
      * @param id the id of the user
      * @return a list of all reviews for a particular user
@@ -58,6 +52,19 @@ public class ReviewController {
         return reviewService.findByUser(id);
     }
 
+    /**
+     * Adds a review to the database from a post request to
+     * /api/company/{id}/reviews with the review to be inserted in the body, the
+     * user id in the request parameter and the company id in the path.
+     * 
+     * @param review    the review to be inserted, fetched from the body of the post
+     *                  request
+     * @param userId    the id of the user who wrote the review, fetched from the
+     *                  request parameter
+     * @param companyId the id of the company the review is about, fetched from the
+     *                  path
+     * @return the review that was inserted
+     */
     @PostMapping(value = HomeController.APIURL + "/company/{id}/reviews")
     public Review addReview(@RequestBody Review review, @RequestParam long userId, @PathVariable("id") long companyId) {
         return reviewService.addReview(review, userId, companyId);
