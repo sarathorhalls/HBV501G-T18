@@ -1,5 +1,12 @@
 package hi.HBV501G.kritikin.controllers;
 
+/**
+ * This class is the controller for everythin related to companies. It handles
+ * the creation, deletion and updating of companies from REST requests.
+ * 
+ * @author Sara Þórhallsdóttir
+ */
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;

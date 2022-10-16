@@ -1,5 +1,13 @@
 package hi.HBV501G.kritikin.controllers;
 
+/**
+ * This class is the controller for the authentication of users. It handles the
+ * login and registration of users from REST requests.
+ * Still Work In Progress
+ * 
+ * @author Sara Þórhallsdóttir
+ */
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;

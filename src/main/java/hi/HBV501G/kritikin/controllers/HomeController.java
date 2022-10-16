@@ -1,5 +1,11 @@
 package hi.HBV501G.kritikin.controllers;
 
+/**
+ * This class is the main entrypoint for the front-end and redirects everything to react which handles the routing.
+ * 
+ * @author Sara Þórhallsdóttir
+ */
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
