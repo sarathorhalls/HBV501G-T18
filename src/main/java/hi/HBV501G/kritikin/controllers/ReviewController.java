@@ -1,5 +1,12 @@
 package hi.HBV501G.kritikin.controllers;
 
+/**
+ * This class is the controller for everythin related to reviews. It handles the
+ * creation, deletion and updating of reviews from REST requests.
+ * 
+ * @author Sara Þórhallsdóttir
+ */
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,48 +18,62 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hi.HBV501G.kritikin.persistence.entites.Review;
-import hi.HBV501G.kritikin.services.CompanyService;
-import hi.HBV501G.kritikin.services.UserService;
+import hi.HBV501G.kritikin.services.ReviewService;
 
 @RestController
 public class ReviewController {
-    CompanyService companyService;
-    UserService userService;
+    ReviewService reviewService;
 
     /**
      * Constructor for ReviewController which uses autowired to inject the
-     * CompanyService and UserService from JPA
-     * @param companyService
-     * @param userService
+     * ReviewService with JPA
+     * 
+     * @param reviewService
      */
     @Autowired
-    public ReviewController(CompanyService companyService, UserService userService) {
-        this.companyService = companyService;
-        this.userService = userService;
+    public ReviewController(ReviewService reviewService) {
+        this.reviewService = reviewService;
     }
 
     /**
-     * Returns a list of all reviews for a particular company with the given id
+     * Returns a list of all reviews as a json object for a particular company with
+     * the given id from a get request to /api/company/{id}/reviews .
+     * 
      * @param id the id of the company
      * @return a list of all reviews for a particular company
      */
     @GetMapping(value = HomeController.APIURL + "/company/{id}/reviews")
     public List<Review> fetchReviewsByCompany(@PathVariable long id) {
-        return companyService.getReviews(id);
+        return reviewService.findByCompany(id);
     }
 
     /**
-     * Returns a list of all reviews for a particular user with the given id
+     * Returns a list of all reviews as a json object for a particular user with the
+     * given id from a get request to /api/user/{id}/reviews .
+     * 
      * @param id the id of the user
      * @return a list of all reviews for a particular user
      */
     @GetMapping(value = HomeController.APIURL + "/user/{id}/reviews")
     public List<Review> fetchReviewsByUser(@PathVariable long id) {
-        return userService.getReviews(id);
+        return reviewService.findByUser(id);
     }
 
-    @PostMapping(value = HomeController.APIURL + "/company/{id}/review")
+    /**
+     * Adds a review to the database from a post request to
+     * /api/company/{id}/reviews with the review to be inserted in the body, the
+     * user id in the request parameter and the company id in the path.
+     * 
+     * @param review    the review to be inserted, fetched from the body of the post
+     *                  request
+     * @param userId    the id of the user who wrote the review, fetched from the
+     *                  request parameter
+     * @param companyId the id of the company the review is about, fetched from the
+     *                  path
+     * @return the review that was inserted
+     */
+    @PostMapping(value = HomeController.APIURL + "/company/{id}/reviews")
     public Review addReview(@RequestBody Review review, @RequestParam long userId, @PathVariable("id") long companyId) {
-        return companyService.addReview(review, userId, companyId);
+        return reviewService.addReview(review, userId, companyId);
     }
 }
