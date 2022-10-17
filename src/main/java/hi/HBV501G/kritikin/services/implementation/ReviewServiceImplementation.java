@@ -1,5 +1,13 @@
 package hi.HBV501G.kritikin.services.implementation;
 
+/**
+ * This class is the implementation of the ReviewService interface. It handles
+ * all business logic to and from the repositories for everything regarding
+ * reviews.
+ * 
+ * @author Sara Þórhallsdóttir
+ */
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,7 +91,7 @@ public class ReviewServiceImplementation implements ReviewService {
      */
     @Override
     public List<Review> findByCompany(long companyId) {
-        return reviewRepository.findByCompany(companyId);
+        return reviewRepository.findByCompanyId(companyId);
     }
 
     /**
@@ -94,7 +102,7 @@ public class ReviewServiceImplementation implements ReviewService {
      */
     @Override
     public List<Review> findByUser(long userId) {
-        return reviewRepository.findByUser(userId);
+        return reviewRepository.findByUserId(userId);
     }
 
     /**

@@ -1,7 +1,7 @@
 package hi.HBV501G.kritikin.controllers;
 
 /**
- * This class is the controller for everythin related to reviews. It handles the
+ * This class is the controller for everything related to reviews. It handles the
  * creation, deletion and updating of reviews from REST requests.
  * 
  * @author Sara Þórhallsdóttir
@@ -22,7 +22,8 @@ import hi.HBV501G.kritikin.services.ReviewService;
 
 @RestController
 public class ReviewController {
-    ReviewService reviewService;
+
+    private ReviewService reviewService;
 
     /**
      * Constructor for ReviewController which uses autowired to inject the
@@ -61,7 +62,7 @@ public class ReviewController {
 
     /**
      * Adds a review to the database from a post request to
-     * /api/company/{id}/reviews with the review to be inserted in the body, the
+     * /api/company/{id}/review with the review to be inserted in the body, the
      * user id in the request parameter and the company id in the path.
      * 
      * @param review    the review to be inserted, fetched from the body of the post
@@ -72,7 +73,7 @@ public class ReviewController {
      *                  path
      * @return the review that was inserted
      */
-    @PostMapping(value = HomeController.APIURL + "/company/{id}/reviews")
+    @PostMapping(value = HomeController.APIURL + "/company/{id}/review")
     public Review addReview(@RequestBody Review review, @RequestParam long userId, @PathVariable("id") long companyId) {
         return reviewService.addReview(review, userId, companyId);
     }

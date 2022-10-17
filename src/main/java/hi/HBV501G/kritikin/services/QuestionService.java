@@ -9,11 +9,15 @@ public interface QuestionService {
 
     void delete(Question question);
 
-    List<Question> findAll();
-
     Question findById(long id);
+
+    List<Question> findAll();
 
     List<Question> findByCompany(long companyId);
 
     List<Question> findByUser(long userId);
+
+    Question addQuestion(Question question, long userId, long companyId);
+
+    Question addAnswer(String answer, long questionId);
 }

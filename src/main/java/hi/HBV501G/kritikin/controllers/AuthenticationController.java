@@ -26,8 +26,8 @@ import hi.HBV501G.kritikin.services.UserService;
 public class AuthenticationController {
     // TODO: use actual authentication
 
-    UserService userService;
-    CompanyUserService companyUserService;
+    private UserService userService;
+    private CompanyUserService companyUserService;
 
     /**
      * Constructor for the AuthenticationController which uses Autowired to inject
@@ -54,14 +54,14 @@ public class AuthenticationController {
     }
 
     /**
-     * Adds a user to the database from a post request to /api/users with the user
+     * Adds a user to the database from a post request to /api/user with the user
      * to be inserted in the body.
      * 
      * @param user the user to be inserted, fetched from the body of the post
      *             request
      * @return the user that was inserted
      */
-    @PostMapping(value = HomeController.APIURL + "/users")
+    @PostMapping(value = HomeController.APIURL + "/user")
     public User addUser(@RequestBody User user) {
         if (user == null || user.getUsername() == null || user.getUsername().equals("")) {
             return null;

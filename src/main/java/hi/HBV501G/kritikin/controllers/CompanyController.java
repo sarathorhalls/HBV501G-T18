@@ -77,14 +77,14 @@ public class CompanyController {
     }
 
     /**
-     * Adds a company to the database from a post request to /api/companies with the
+     * Adds a company to the database from a post request to /api/company with the
      * company to be inserted in the body.
      * 
      * @param company the company to be inserted, fetched from the body of the post
      *                request
      * @return the inserted company or null if the company already exists
      */
-    @PostMapping(value = HomeController.APIURL + "/companies")
+    @PostMapping(value = HomeController.APIURL + "/company")
     public Company addCompany(@RequestBody Company company) {
         if (company == null || company.getName() == null || company.getName().equals("")) {
             return null;
