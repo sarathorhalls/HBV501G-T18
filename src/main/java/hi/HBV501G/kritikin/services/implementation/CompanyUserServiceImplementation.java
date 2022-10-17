@@ -1,5 +1,13 @@
 package hi.HBV501G.kritikin.services.implementation;
 
+/**
+ * This class is the implementation of the CompanyUserService interface. It handles
+ * all business logic to and from the repositories for everything regarding
+ * company users.
+ * 
+ * @author Sara Þórhallsdóttir
+ */
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
