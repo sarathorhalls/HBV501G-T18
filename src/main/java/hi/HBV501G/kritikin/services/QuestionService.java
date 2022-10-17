@@ -9,9 +9,9 @@ public interface QuestionService {
 
     void delete(Question question);
 
-    List<Question> findAll();
-
     Question findById(long id);
+
+    List<Question> findAll();
 
     List<Question> findByCompany(long companyId);
 
