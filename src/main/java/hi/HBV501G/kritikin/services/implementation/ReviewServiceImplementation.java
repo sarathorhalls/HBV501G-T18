@@ -83,7 +83,7 @@ public class ReviewServiceImplementation implements ReviewService {
      */
     @Override
     public List<Review> findByCompany(long companyId) {
-        return reviewRepository.findByCompany(companyId);
+        return reviewRepository.findByCompanyId(companyId);
     }
 
     /**
@@ -94,7 +94,7 @@ public class ReviewServiceImplementation implements ReviewService {
      */
     @Override
     public List<Review> findByUser(long userId) {
-        return reviewRepository.findByUser(userId);
+        return reviewRepository.findByUserId(userId);
     }
 
     /**
