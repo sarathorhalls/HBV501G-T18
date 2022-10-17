@@ -29,32 +29,32 @@ export default function Root(props) {
     }
 
     async function createCompany() {
-        let response = await props.api.post("/companies", { name: "New Company" });
+        let response = await props.api.post("/company", { name: "New Company" });
         console.log(response);
         loadCompanies();
     }
 
     async function createUser() {
-        let response = await props.api.post("/users", { username: "New User", password: "password" });
+        let response = await props.api.post("/user", { username: "New User", password: "password" });
         console.log(response);
         loadUsers();
     }
 
     async function addReview(companyId, userId) {
-        let response = await props.api.post("/company/" + companyId + "/reviews", { starRating: 5.0, reviewText: "New Review" }, { params: { userId } });
+        let response = await props.api.post("/company/" + companyId + "/review", { starRating: 5.0, reviewText: "New Review" }, { params: { userId } });
         console.log(response);
         loadReviews(companyId);
     }
 
     async function addQuestion(companyId, userId) {
-        let response = await props.api.post("/company/" + companyId + "/questions", { questionText: "New Question" }, { params: { userId } });
+        let response = await props.api.post("/company/" + companyId + "/question", { questionText: "New Question" }, { params: { userId } });
         console.log(response);
         loadQuestions(companyId);
     }
 
     async function addAnswer(questionId) {
         const answer = "New Answer";
-        let response = await props.api.post("/question/" + questionId + "/answers", answer, { headers: { "Content-Type": "text/plain" } });
+        let response = await props.api.post("/question/" + questionId + "/answer", answer, { headers: { "Content-Type": "text/plain" } });
         console.log(response);
         loadQuestions(37);
     }

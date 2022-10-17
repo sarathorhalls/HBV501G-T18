@@ -22,7 +22,8 @@ import hi.HBV501G.kritikin.services.QuestionService;
 
 @RestController
 public class QuestionController {
-    QuestionService questionService;
+
+    private QuestionService questionService;
 
     /**
      * Constructor for QuestionController which uses autowired to inject the
@@ -63,7 +64,7 @@ public class QuestionController {
 
     /**
      * Adds a question to the database from a post request to
-     * /api/company/{id}/questions with the question to be inserted in the body, the
+     * /api/company/{id}/question with the question to be inserted in the body, the
      * user id in the request parameter and the company id in the path.
      * 
      * @param question  the question to be inserted, fetched from the body of the
@@ -74,7 +75,7 @@ public class QuestionController {
      *                  path
      * @return the question that was inserted
      */
-    @PostMapping(value = HomeController.APIURL + "/company/{id}/questions")
+    @PostMapping(value = HomeController.APIURL + "/company/{id}/question")
     public Question addQuestion(@RequestBody Question question, @RequestParam long userId,
             @PathVariable("id") long companyId) {
         return questionService.addQuestion(question, userId, companyId);
@@ -91,7 +92,7 @@ public class QuestionController {
      *                   the path
      * @return the question that was updated
      */
-    @PostMapping(value = HomeController.APIURL + "/question/{id}/answers")
+    @PostMapping(value = HomeController.APIURL + "/question/{id}/answer")
     public Question addAnswer(@RequestBody String answer, @PathVariable("id") long questionId) {
         return questionService.addAnswer(answer, questionId);
     }
