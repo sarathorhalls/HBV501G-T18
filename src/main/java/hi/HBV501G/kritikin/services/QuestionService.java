@@ -16,4 +16,6 @@ public interface QuestionService {
     List<Question> findByCompany(long companyId);
 
     List<Question> findByUser(long userId);
+
+    Question addQuestion(Question question, long userId, long companyId);
 }
