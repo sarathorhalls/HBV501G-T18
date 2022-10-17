@@ -34,7 +34,12 @@ public class QuestionController {
 
     @PostMapping(value = HomeController.APIURL + "/company/{id}/questions")
     public Question addQuestion(@RequestBody Question question, @RequestParam long userId,
-            @PathVariable long companyId) {
+            @PathVariable("id") long companyId) {
         return questionService.addQuestion(question, userId, companyId);
+    }
+
+    @PostMapping(value = HomeController.APIURL + "/question/{id}/answers")
+    public Question addAnswer(@RequestBody String answer, @PathVariable("id") long questionId) {
+        return questionService.addAnswer(answer, questionId);
     }
 }
