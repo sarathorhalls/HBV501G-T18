@@ -18,4 +18,6 @@ public interface QuestionService {
     List<Question> findByUser(long userId);
 
     Question addQuestion(Question question, long userId, long companyId);
+
+    Question addAnswer(String answer, long questionId);
 }
