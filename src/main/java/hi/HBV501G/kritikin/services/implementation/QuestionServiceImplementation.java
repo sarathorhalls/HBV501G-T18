@@ -48,12 +48,12 @@ public class QuestionServiceImplementation implements QuestionService {
 
     @Override
     public List<Question> findByCompany(long companyId) {
-        return questionRepository.findByCompany(companyId);
+        return questionRepository.findByCompanyId(companyId);
     }
 
     @Override
     public List<Question> findByUser(long userId) {
-        return questionRepository.findByUser(userId);
+        return questionRepository.findByUserId(userId);
     }
 
     @Override
@@ -66,6 +66,14 @@ public class QuestionServiceImplementation implements QuestionService {
             question.setUser(userService.getReferenceById(userId));
         }
 
+        questionRepository.save(question);
+        return question;
+    }
+
+    @Override
+    public Question addAnswer(String answer, long questionId) {
+        Question question = questionRepository.findById(questionId);
+        question.setAnswerString(answer);
         questionRepository.save(question);
         return question;
     }
