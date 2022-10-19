@@ -52,7 +52,7 @@ export default function App() {
                 </Typography>
                 <TextField
                     id="search"
-                    label="Search…"
+                    label="Leita …"
                     variant="standard"
                     // TODO: fix color
                     sx={{ flexGrow: 1 }}
@@ -66,7 +66,7 @@ export default function App() {
                                 color="inherit"
                                 onClick={() => setLoggedIn(false)}
                             >
-                                Log out {username}
+                                Skrá út {username}
                             </Button>
                         )
                         : (
@@ -75,12 +75,12 @@ export default function App() {
                                     variant="text"
                                     color="inherit"
                                     onClick={() => setLoggedIn(true)}
-                                >Log in</Button>
+                                >Skrá inn</Button>
                                 <Button
                                     variant="text"
                                     color="inherit"
                                     onClick={() => window.alert("Pressed sign up")}
-                                >Sign up</Button>
+                                >Stofna reikning</Button>
                             </>
                         )
                     }

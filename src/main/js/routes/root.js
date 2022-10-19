@@ -7,7 +7,7 @@ export default function Root() {
         <Container maxWidth="lg">
             <TextField
                 id="body-search"
-                label="Search"
+                label="Leita"
                 variant="filled"
                 onKeyPress={(e) => {
                     if (e.key === "Enter") {

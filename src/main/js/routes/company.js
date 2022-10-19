@@ -81,7 +81,7 @@ export default function Company(props) {
                         <Typography
                             variant="h3"
                         >
-                            Reviews
+                            Umsagnir
                         </Typography>
                         <div>
                             {JSON.stringify(company.reviews)}
@@ -89,7 +89,7 @@ export default function Company(props) {
                         <Typography
                             variant="h3"
                         >
-                            Questions
+                            Spurningar
                         </Typography>
                         <div>
                             {JSON.stringify(company.questions)}
