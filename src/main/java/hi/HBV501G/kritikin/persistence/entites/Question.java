@@ -1,5 +1,6 @@
 package hi.HBV501G.kritikin.persistence.entites;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "questions")
 public class Question {
@@ -15,24 +18,31 @@ public class Question {
     @GeneratedValue
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "company_id")
+    @JsonBackReference(value = "company-question")
     private Company company;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
+    @JsonBackReference(value = "user-question")
     private User user;
 
     private String questionText;
     private String answerString;
 
-    public Question() {}
+    public Question() {
+    }
 
     public Question(Company company, User user, String questionText, String answerString) {
         this.company = company;
         this.user = user;
         this.questionText = questionText;
         this.answerString = answerString;
+    }
+
+    public Question(String questionText) {
+        this.questionText = questionText;
     }
 
     public long getId() {
@@ -71,5 +81,4 @@ public class Question {
         this.answerString = answerString;
     }
 
-    
 }

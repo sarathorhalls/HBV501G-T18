@@ -1,13 +1,19 @@
 package hi.HBV501G.kritikin.services.implementation;
 
+/**
+ * This class is the implementation of the CompanyService interface. It handles
+ * all business logic to and from the repositories for everything regarding
+ * companies.
+ * 
+ * @author Sara Þórhallsdóttir
+ */
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hi.HBV501G.kritikin.persistence.entites.Company;
-import hi.HBV501G.kritikin.persistence.entites.Question;
-import hi.HBV501G.kritikin.persistence.entites.Review;
 import hi.HBV501G.kritikin.persistence.repositories.CompanyRepository;
 import hi.HBV501G.kritikin.services.CompanyService;
 
@@ -16,6 +22,12 @@ public class CompanyServiceImplementation implements CompanyService {
 
     private final CompanyRepository companyRepository;
 
+    /**
+     * Constructor for CompanyServiceImplementation which uses Autowired to inject
+     * companyRepository from JPA.
+     * 
+     * @param companyRepository
+     */
     @Autowired
     public CompanyServiceImplementation(CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
@@ -25,39 +37,67 @@ public class CompanyServiceImplementation implements CompanyService {
 
     }
 
+    /**
+     * Saves a company to the database.
+     * 
+     * @param company the company to be saved.
+     */
     @Override
     public void save(Company company) {
         companyRepository.save(company);
     }
 
+    /**
+     * Deletes a company from the database.
+     * 
+     * @param company the company to be deleted.
+     */
     @Override
     public void delete(Company company) {
         companyRepository.delete(company);
     }
 
-    @Override
-    public Review addReview(Review review, long userId, long companyId) {
-        return null;
-    }
-
-    @Override
-    public Question addQuestion(Question question, long userId, long companyId) {
-        return null;
-    }
-
+    /**
+     * Returns a company from the database with a given id.
+     * 
+     * @param id the id of the company to be returned.
+     * @return the company with the given id.
+     */
     @Override
     public Company findById(long id) {
         return companyRepository.findById(id);
     }
 
+    /**
+     * Returns a company from the database with a given name.
+     * 
+     * @param name the name of the company to be returned.
+     * @return the company with the given name.
+     */
     @Override
     public Company findByName(String name) {
         return companyRepository.findByName(name);
     }
 
+    /**
+     * Returns a list of all companies in the database.
+     * 
+     * @return a list of all companies in the database.
+     */
     @Override
     public List<Company> findAll() {
         return companyRepository.findAll();
     }
 
+    /**
+     * Returns a reference to a particular company as an object in the database with
+     * the given id.
+     * 
+     * @param id the id of the company to be returned.
+     * @return a reference to the company with the given id.
+     */
+    @Override
+    public Company getReferenceById(long id) {
+        return companyRepository.getReferenceById(id);
+    }
 }

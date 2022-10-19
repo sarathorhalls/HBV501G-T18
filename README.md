@@ -8,6 +8,8 @@ Add a matching password for postgres to both files.
 
 Install [Docker and Docker Compose](https://docs.docker.com/get-docker/).
 
+If there is a target folder in the root directory remove it (Maven sometimes likes to create a folder called target which clashes with docker)
+
 ## Running
 
 ```bash

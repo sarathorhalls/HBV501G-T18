@@ -1,5 +1,6 @@
 package hi.HBV501G.kritikin.persistence.entites;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "reviews")
 public class Review {
@@ -15,22 +18,30 @@ public class Review {
     @GeneratedValue
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "company_id")
+    @JsonBackReference(value = "company-review")
     private Company company;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
+    @JsonBackReference(value = "user-review")
     private User user;
 
     private Double starRating;
     private String reviewText;
 
-    public Review() {}
+    public Review() {
+    }
 
     public Review(Company company, User user, Double starRating, String reviewText) {
         this.company = company;
         this.user = user;
+        this.starRating = starRating;
+        this.reviewText = reviewText;
+    }
+
+    public Review(Double starRating, String reviewText) {
         this.starRating = starRating;
         this.reviewText = reviewText;
     }
@@ -71,5 +82,4 @@ public class Review {
         this.reviewText = reviewText;
     }
 
-    
 }

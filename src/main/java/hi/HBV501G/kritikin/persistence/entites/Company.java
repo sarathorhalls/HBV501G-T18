@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "companies")
 public class Company {
@@ -23,9 +25,11 @@ public class Company {
     private String openingHours;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "company-review")
     private List<Review> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "company-question")
     private List<Question> questions = new ArrayList<>();
 
     public Company() {
@@ -48,6 +52,16 @@ public class Company {
         this.name = name;
         reviews = null;
         questions = null;
+    }
+
+    public Review addReview(Review review) {
+        reviews.add(review);
+        return review;
+    }
+
+    public Question addQuestion(Question question) {
+        questions.add(question);
+        return question;
     }
 
     public long getId() {
