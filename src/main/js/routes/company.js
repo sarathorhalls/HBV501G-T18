@@ -13,6 +13,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import Grid from "@mui/material/Unstable_Grid2";
 import WebIcon from '@mui/icons-material/Web';
 import PhoneIcon from '@mui/icons-material/Phone';
 import ScheduleIcon from '@mui/icons-material/Schedule';
@@ -34,6 +35,14 @@ export default function Company(props) {
         // TODO: throw error if nothing found
     }
 
+    /**
+     * Closes the "write review" dialog
+     */
+    function handleCloseReviewDialog() {
+        setReviewDialogOpen(false);
+    }
+
+    // TODO: add jsdoc here because I don't understand how I'm supposed to type hint the event object
     async function submitReview(event) {
         // Prevent GET submission + reload
         event.preventDefault();
@@ -49,6 +58,9 @@ export default function Company(props) {
 
         // Load updated company information
         loadCompany();
+
+        // Close dialog
+        handleCloseReviewDialog();
     }
 
     // Load company when component loads
@@ -57,7 +69,7 @@ export default function Company(props) {
     }, []);
 
     const reviewDialog = (
-        <Dialog open={reviewDialogOpen} onClose={() => void(0)}>
+        <Dialog open={reviewDialogOpen} onClose={handleCloseReviewDialog}>
             <DialogTitle>Skrifa umsögn</DialogTitle>
             <DialogContent>
                 <DialogContentText>
@@ -89,7 +101,7 @@ export default function Company(props) {
                     />
                     <DialogActions>
                         <Button
-                            onClick={() => void(0)}
+                            onClick={handleCloseReviewDialog}
                         >
                             Hætta við
                         </Button>
@@ -160,63 +172,73 @@ export default function Company(props) {
                             >
                                 Umsagnir
                             </Typography>
-                            <Box>
-                                {company.reviews && company.reviews.length !== 0
-                                    ? (
-                                        company.reviews.map(review => (
-                                            <Card sx={{ minWidth: 275 }} key={review.id}>
-                                                <CardContent>
-                                                    <Typography gutterBottom variant="h5" component="div">
-                                                        Notandanafn
-                                                    </Typography>
-                                                    <StarRating rating={review.starRating} />
-                                                    <Typography variant="body2">
-                                                        {review.reviewText}
-                                                    </Typography>
-                                                </CardContent>
-                                            </Card>
-                                        ))
-                                    ) : (
-                                        <Typography variant="body1">
-                                            Engar umsagnir eru til um þetta fyrirtæki.
-                                        </Typography>
-                                    )
-                                }
-                            </Box>
+                            {company.reviews && company.reviews.length !== 0
+                                ? (
+                                    <Grid container spacing={2}>
+                                        {company.reviews.map(review => (
+                                            <Grid item xs={12} sm={6} md={3} key={review.id}>
+                                                <Card>
+                                                    <CardContent>
+                                                        <Typography gutterBottom variant="h5" component="div">
+                                                            Notandanafn
+                                                        </Typography>
+                                                        <StarRating rating={review.starRating} />
+                                                        <Typography variant="body2">
+                                                            {review.reviewText}
+                                                        </Typography>
+                                                    </CardContent>
+                                                </Card>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+                                ) : (
+                                    <Typography variant="body1">
+                                        Engar umsagnir eru til um þetta fyrirtæki.
+                                    </Typography>
+                                )
+                            }
+                            <Button
+                                variant="contained"
+                                onClick={() => setReviewDialogOpen(true)}
+                            >
+                                Skrifa umsögn
+                            </Button>
                             <Typography
                                 variant="h3"
                             >
                                 Spurningar
                             </Typography>
-                            <Box>
-                                {company.questions && company.questions.length !== 0
-                                    ? (
-                                        company.questions.map(question => (
-                                            <Card sx={{ minWidth: 275 }} key={question.id}>
-                                                <CardContent>
-                                                    <Typography gutterBottom variant="h5" component="div">
-                                                        Notandanafn
-                                                    </Typography>
-                                                    <StarRating rating={review.starRating} />
-                                                    <Typography variant="body2">
-                                                        {question.questionText}
-                                                    </Typography>
-                                                    <Typography variant="h5" component="div">
-                                                        Svar
-                                                    </Typography>
-                                                    <Typography variant="body2">
-                                                        {question.answerString ? question.answerString : 'Þessari spurningu hefur ekki verið svarað.'}
-                                                    </Typography>
-                                                </CardContent>
-                                            </Card>
-                                        ))
-                                    ) : (
-                                        <Typography variant="body1">
-                                            Engar spurningar hafa borist þessu fyrirtæki.
-                                        </Typography>
-                                    )
-                                }
-                            </Box>
+                            {company.questions && company.questions.length !== 0
+                                ? (
+                                    <Grid container spacing={2}>
+                                        {company.questions.map(question => (
+                                            <Grid item xs={12} sm={6} md={3} key={question.id}>
+                                                <Card>
+                                                    <CardContent>
+                                                        <Typography gutterBottom variant="h5" component="div">
+                                                            Notandanafn
+                                                        </Typography>
+                                                        <StarRating rating={review.starRating} />
+                                                        <Typography variant="body2">
+                                                            {question.questionText}
+                                                        </Typography>
+                                                        <Typography variant="h5" component="div">
+                                                            Svar
+                                                        </Typography>
+                                                        <Typography variant="body2">
+                                                            {question.answerString ? question.answerString : 'Þessari spurningu hefur ekki verið svarað.'}
+                                                        </Typography>
+                                                    </CardContent>
+                                                </Card>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+                                ) : (
+                                    <Typography variant="body1">
+                                        Engar spurningar hafa borist þessu fyrirtæki.
+                                    </Typography>
+                                )
+                            }
                         </>
                     )
                     : (
