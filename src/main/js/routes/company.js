@@ -191,7 +191,8 @@ export default function Company(props) {
                                             </Grid>
                                         ))}
                                     </Grid>
-                                ) : (
+                                )
+                                : (
                                     <Typography variant="body1">
                                         Engar umsagnir eru til um þetta fyrirtæki.
                                     </Typography>
@@ -233,7 +234,8 @@ export default function Company(props) {
                                             </Grid>
                                         ))}
                                     </Grid>
-                                ) : (
+                                )
+                                : (
                                     <Typography variant="body1">
                                         Engar spurningar hafa borist þessu fyrirtæki.
                                     </Typography>
