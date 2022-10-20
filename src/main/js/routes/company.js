@@ -3,7 +3,7 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 import Chip from "@mui/material/Chip";
-import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -128,7 +128,7 @@ export default function Company(props) {
                             >
                                 {company.name}
                             </Typography>
-                            <Box>
+                            <Stack direction="row" spacing={2}>
                                 <Chip
                                     icon={<WebIcon />}
                                     label="Vefur"
@@ -158,10 +158,10 @@ export default function Company(props) {
                                     clickable
                                     // TODO: add aria-label or similar
                                 />
-                                <StarRating
-                                    rating={company.starRating}
-                                />
-                            </Box>
+                            </Stack>
+                            <StarRating
+                                rating={company.starRating}
+                            />
                             <Typography
                                 variant="body1"
                             >
