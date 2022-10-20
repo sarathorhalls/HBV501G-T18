@@ -128,7 +128,7 @@ export default function Company(props) {
                             >
                                 {company.name}
                             </Typography>
-                            <Stack direction="row" spacing={2}>
+                            <Stack direction="row" spacing={1}>
                                 <Chip
                                     icon={<WebIcon />}
                                     label="Vefur"
