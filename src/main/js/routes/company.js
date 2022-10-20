@@ -25,10 +25,10 @@ export default function Company(props) {
     const [company, setCompany] = useState(null);
     const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
 
+    /**
+     * Loads the company with the current specified ID and sets the state
+     */
     async function loadCompany() {
-        /**
-         * Loads the company with the current specified ID and sets the state
-         */
         const response = await props.api.get(`/company/${id}`);
         setCompany(response.data);
         // TODO: throw error if nothing found
