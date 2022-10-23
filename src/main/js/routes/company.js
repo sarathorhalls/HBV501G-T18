@@ -7,7 +7,6 @@ import Stack from "@mui/material/Stack";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions"
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -19,13 +18,17 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import BusinessIcon from '@mui/icons-material/Business';
 import { useParams } from "react-router-dom";
-import { StarRating } from "../components";
+import { StarPicker, StarRating } from "../components";
 
 export default function Company(props) {
+    // Data
     const { id } = useParams();
     const [company, setCompany] = useState(null);
+    // Dialog open variables
     const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
     const [questionDialogOpen, setQuestionDialogOpen] = useState(false);
+    // State variable that keeps track of the selected star rating in the reviewDialog
+    const [starPickerRating, setStarPickerRating] = useState(0);
 
     /**
      * Loads the company with the current specified ID and sets the state
@@ -58,10 +61,10 @@ export default function Company(props) {
         // Get data
         const form = event.target;
         const text = form.text.value;
-        const stars = parseFloat(form.stars.value);
+
         // TODO: add user id
         // TODO: handle errors/success
-        const response = await props.api.post(`/company/${id}/review`, { starRating: stars, reviewText: text }, { params: { userId: 7 } });
+        const response = await props.api.post(`/company/${id}/review`, { starRating: starPickerRating, reviewText: text }, { params: { userId: 7 } });
         // Load updated company information
         loadCompany();
         
@@ -93,6 +96,7 @@ export default function Company(props) {
         loadCompany();
     }, []);
 
+    // "Write review" dialog
     const reviewDialog = (
         <Dialog open={reviewDialogOpen} onClose={handleCloseReviewDialog}>
             <DialogTitle>Skrifa umsögn</DialogTitle>
@@ -108,15 +112,9 @@ export default function Company(props) {
                         fullWidth
                         multiline
                     />
-                    <TextField
-                        margin="dense"
-                        id="review_stars"
-                        name="stars"
-                        label="Stjörnur"
-                        type="number"
-                        step="0.5"
-                        fullWidth
-                        // TODO: replace with custom star input
+                    <StarPicker
+                        rating={starPickerRating}
+                        setRating={setStarPickerRating}
                     />
                     <DialogActions>
                         <Button onClick={handleCloseReviewDialog}>
@@ -131,6 +129,7 @@ export default function Company(props) {
         </Dialog>
     );
 
+    // "Ask question" dialog
     const questionDialog = (
         <Dialog open={questionDialogOpen} onClose={handleCloseQuestionDialog}>
             <DialogTitle>Spyrja spurningar</DialogTitle>
