@@ -52,7 +52,7 @@ export default function StarPicker(props) {
     // TODO: add accessible way of reading rating
     return (
         <Box
-            // If box is left, no rating is being hovered over
+            // If mouse leaves box, no rating is being hovered over
             onMouseOut={() => setHoverRating(0)}
         >
             {stars}
