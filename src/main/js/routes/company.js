@@ -19,7 +19,21 @@ import ScheduleIcon from '@mui/icons-material/Schedule';
 import BusinessIcon from '@mui/icons-material/Business';
 import { useParams } from "react-router-dom";
 import { StarPicker, StarRating } from "../components";
+import Axios from "axios";
 
+/**
+ * Props object for the company page
+ * 
+ * @typedef {object} CompanyProps
+ * @property {Axios} api Axios object connected to the REST API
+ */
+
+/**
+ * Company page component
+ * 
+ * @component
+ * @param {CompanyProps} props
+ */
 export default function Company(props) {
     // Data
     const { id } = useParams();
