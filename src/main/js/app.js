@@ -1,8 +1,16 @@
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
+import React, { useState } from "react";
+import { createRoot } from "react-dom/client";
 import Axios from "axios";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Root } from "./routes";
+import { Root, ErrorPage, Company } from "./routes";
+import CssBaseline from "@mui/material/CssBaseline";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
 
 const api = Axios.create({
     baseURL: "http://localhost:8080/api",
@@ -11,29 +19,85 @@ const api = Axios.create({
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Root api={api}/> // replace with root element
+        element: <Root />,
+        errorElement: <ErrorPage />
+    },
+    {
+        path: "/company/:id",
+        element: <Company api={api} />
+        // TODO: define errorElement for not found
     }
 ]);
 
-class App extends Component {
-    render() {
-        return (
-            <React.StrictMode>
-                <RouterProvider router={router} />
-            </React.StrictMode>
-        );
-    }
+export default function App() {
+    // TODO: implement actual authentication
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [username, setUsername] = useState("janedoe");
+
+    const appToolbar = (
+        <AppBar position="sticky">
+            <Toolbar>
+                <Typography
+                    variant="h6"
+                    noWrap
+                    sx={{ flexGrow: 1 }}
+                >
+                    <Link
+                        href="/"
+                        color="inherit"
+                        underline="none"
+                    >
+                        Krítíkin
+                    </Link>
+                </Typography>
+                <TextField
+                    id="search"
+                    label="Leita …"
+                    variant="standard"
+                    // TODO: fix color
+                    sx={{ flexGrow: 1 }}
+                />
+                <Box sx={{ flexGrow: 1 }} />
+                <Box>
+                    {loggedIn
+                        ? (
+                            <Button
+                                variant="text"
+                                color="inherit"
+                                onClick={() => setLoggedIn(false)}
+                            >
+                                Skrá út {username}
+                            </Button>
+                        )
+                        : (
+                            <>
+                                <Button
+                                    variant="text"
+                                    color="inherit"
+                                    onClick={() => setLoggedIn(true)}
+                                >Skrá inn</Button>
+                                <Button
+                                    variant="text"
+                                    color="inherit"
+                                    onClick={() => window.alert("Pressed sign up")}
+                                >Stofna reikning</Button>
+                            </>
+                        )
+                    }
+                </Box>
+            </Toolbar>
+        </AppBar>
+    );
+
+    return (
+        <React.StrictMode>
+            <CssBaseline />
+            { appToolbar }
+            <RouterProvider router={router} />
+        </React.StrictMode>
+    );
 }
 
-class SearchBar extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { term: "" };
-    }
-
-    render() {
-        return <div>a</div>;
-    }
-}
-
-ReactDOM.render(<App />, document.getElementById("react"));
+const container = document.getElementById("react");
+const root = createRoot(container);
+root.render(<App />);
