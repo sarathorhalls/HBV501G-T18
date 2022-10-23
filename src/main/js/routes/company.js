@@ -58,6 +58,8 @@ export default function Company(props) {
      */
     function handleCloseReviewDialog() {
         setReviewDialogOpen(false);
+        // Reset star picker rating since it's not a form input
+        setStarPickerRating(0);
     }
 
     /**
