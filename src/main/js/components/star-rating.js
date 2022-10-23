@@ -12,6 +12,7 @@ export default function StarRating(props) {
     const noOfTotalStars = 5;
     // Number of completely filled star icons
     const noOfFilledStars = Math.floor(props.rating);
+    
     // Add appropriate number of filled star icons
     let i = 0;
     for (; i < noOfFilledStars; i++) {
