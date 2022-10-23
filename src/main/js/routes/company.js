@@ -25,6 +25,7 @@ export default function Company(props) {
     const { id } = useParams();
     const [company, setCompany] = useState(null);
     const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
+    const [questionDialogOpen, setQuestionDialogOpen] = useState(false);
 
     /**
      * Loads the company with the current specified ID and sets the state
@@ -42,6 +43,13 @@ export default function Company(props) {
         setReviewDialogOpen(false);
     }
 
+    /**
+     * Closes the "ask question" dialog
+     */
+    function handleCloseQuestionDialog() {
+        setQuestionDialogOpen(false);
+    }
+
     // TODO: add jsdoc here because I don't understand how I'm supposed to type hint the event object
     async function submitReview(event) {
         // Prevent GET submission + reload
@@ -52,15 +60,32 @@ export default function Company(props) {
         const text = form.text.value;
         const stars = parseFloat(form.stars.value);
         // TODO: add user id
-        const response = await props.api.post(`/company/${id}/review`, { starRating: stars, reviewText: text }, { params: { userId: 7 } })
-        console.log(response);
         // TODO: handle errors/success
-
+        const response = await props.api.post(`/company/${id}/review`, { starRating: stars, reviewText: text }, { params: { userId: 7 } });
         // Load updated company information
         loadCompany();
-
+        
         // Close dialog
         handleCloseReviewDialog();
+    }
+    
+    // TODO: add jsdoc
+    async function submitQuestion(event) {
+        // Prevent GET submission + reload
+        event.preventDefault();
+        
+        // Get data
+        const form = event.target;
+        const text = form.text.value;
+        
+        // TODO: add user id
+        // TODO: handle errors/success
+        const response = await props.api.post(`/company/${id}/question`, { questionText: text }, { params: { userId: 7 } });
+        // Load updated company information
+        loadCompany();
+        
+        // Close dialog
+        handleCloseQuestionDialog();
     }
 
     // Load company when component loads
@@ -72,13 +97,7 @@ export default function Company(props) {
         <Dialog open={reviewDialogOpen} onClose={handleCloseReviewDialog}>
             <DialogTitle>Skrifa umsögn</DialogTitle>
             <DialogContent>
-                <DialogContentText>
-                    lorem ipsum
-                </DialogContentText>
-                <form
-                    id="review_form"
-                    onSubmit={submitReview}
-                >
+                <form id="review_form" onSubmit={submitReview}>
                     <TextField
                         autoFocus
                         margin="dense"
@@ -100,35 +119,58 @@ export default function Company(props) {
                         // TODO: replace with custom star input
                     />
                     <DialogActions>
-                        <Button
-                            onClick={handleCloseReviewDialog}
-                        >
+                        <Button onClick={handleCloseReviewDialog}>
                             Hætta við
                         </Button>
-                        <Button
-                            type="submit"
-                        >
+                        <Button type="submit">
                             Senda
                         </Button>
                     </DialogActions>
                 </form>
             </DialogContent>
         </Dialog>
-    )
+    );
+
+    const questionDialog = (
+        <Dialog open={questionDialogOpen} onClose={handleCloseQuestionDialog}>
+            <DialogTitle>Spyrja spurningar</DialogTitle>
+            <DialogContent>
+                <form id="question_form" onSubmit={submitQuestion}>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="question_text"
+                        name="text"
+                        label="Spurning"
+                        type="text"
+                        fullWidth
+                        multiline
+                    />
+                    <DialogActions>
+                        <Button onClick={handleCloseQuestionDialog}>
+                            Hætta við
+                        </Button>
+                        <Button type="submit">
+                            Senda
+                        </Button>
+                    </DialogActions>
+                </form>
+            </DialogContent>
+        </Dialog>
+    );
 
     return (
         <>
             {reviewDialog}
+            {questionDialog}
             <Container maxWidth="lg">
                 {company
                     ? (
                         <>
-                            <Typography
-                                variant="h2"
-                            >
+                            <Typography variant="h2" mt={2} mb={1}>
                                 {company.name}
                             </Typography>
-                            <Stack direction="row" spacing={1}>
+                            <Stack direction="row" spacing={1} mb={1}>
                                 <Chip
                                     icon={<WebIcon />}
                                     label="Vefur"
@@ -159,22 +201,16 @@ export default function Company(props) {
                                     // TODO: add aria-label or similar
                                 />
                             </Stack>
-                            <StarRating
-                                rating={company.starRating}
-                            />
-                            <Typography
-                                variant="body1"
-                            >
+                            <StarRating rating={company.starRating} />
+                            <Typography variant="body1" mt={1}>
                                 {company.description}
                             </Typography>
-                            <Typography
-                                variant="h3"
-                            >
+                            <Typography variant="h3" mt={4} mb={1}>
                                 Umsagnir
                             </Typography>
                             {company.reviews && company.reviews.length !== 0
                                 ? (
-                                    <Grid container spacing={2}>
+                                    <Grid container spacing={2} mb={1}>
                                         {company.reviews.map(review => (
                                             <Grid item xs={12} sm={6} md={3} key={review.id}>
                                                 <Card>
@@ -183,7 +219,7 @@ export default function Company(props) {
                                                             Notandanafn
                                                         </Typography>
                                                         <StarRating rating={review.starRating} />
-                                                        <Typography variant="body2">
+                                                        <Typography variant="body2" mt={1}>
                                                             {review.reviewText}
                                                         </Typography>
                                                     </CardContent>
@@ -194,7 +230,7 @@ export default function Company(props) {
                                 )
                                 : (
                                     <Typography variant="body1">
-                                        Engar umsagnir eru til um þetta fyrirtæki.
+                                        Engar umsagnir hafa verið skrifaðar um þetta fyrirtæki.
                                     </Typography>
                                 )
                             }
@@ -204,14 +240,12 @@ export default function Company(props) {
                             >
                                 Skrifa umsögn
                             </Button>
-                            <Typography
-                                variant="h3"
-                            >
+                            <Typography variant="h3" mt={4} mb={1}>
                                 Spurningar
                             </Typography>
                             {company.questions && company.questions.length !== 0
                                 ? (
-                                    <Grid container spacing={2}>
+                                    <Grid container spacing={2} mb={1}>
                                         {company.questions.map(question => (
                                             <Grid item xs={12} sm={6} md={3} key={question.id}>
                                                 <Card>
@@ -219,16 +253,24 @@ export default function Company(props) {
                                                         <Typography gutterBottom variant="h5" component="div">
                                                             Notandanafn
                                                         </Typography>
-                                                        <StarRating rating={review.starRating} />
                                                         <Typography variant="body2">
                                                             {question.questionText}
                                                         </Typography>
-                                                        <Typography variant="h5" component="div">
+                                                        <Typography variant="h5" component="div" mt={2}>
                                                             Svar
                                                         </Typography>
-                                                        <Typography variant="body2">
-                                                            {question.answerString ? question.answerString : 'Þessari spurningu hefur ekki verið svarað.'}
-                                                        </Typography>
+                                                        {question.answerString
+                                                            ? (
+                                                                <Typography variant="body2">
+                                                                    {question.answerString}
+                                                                </Typography>
+                                                            )
+                                                            : (
+                                                                <Typography variant="body2" color="text.secondary">
+                                                                    Þessari spurningu hefur ekki verið svarað.
+                                                                </Typography>
+                                                            )
+                                                        }
                                                     </CardContent>
                                                 </Card>
                                             </Grid>
@@ -241,6 +283,12 @@ export default function Company(props) {
                                     </Typography>
                                 )
                             }
+                            <Button
+                                variant="contained"
+                                onClick={() => setQuestionDialogOpen(true)}
+                            >
+                                Spyrja spurningar
+                            </Button>
                         </>
                     )
                     : (
