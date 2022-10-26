@@ -45,8 +45,8 @@ public class CompanyServiceImplementation implements CompanyService {
      * @param company the company to be saved.
      */
     @Override
-    public void save(Company company) {
-        companyRepository.save(company);
+    public Company save(Company company) {
+        return companyRepository.save(company);
     }
 
     /**

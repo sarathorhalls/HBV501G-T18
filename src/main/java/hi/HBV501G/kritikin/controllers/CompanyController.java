@@ -1,5 +1,7 @@
 package hi.HBV501G.kritikin.controllers;
 
+import java.net.URI;
+
 /**
  * This class is the controller for everythin related to companies. It handles
  * the creation, deletion and updating of companies from REST requests.
@@ -10,12 +12,14 @@ package hi.HBV501G.kritikin.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import hi.HBV501G.kritikin.persistence.entites.Company;
 import hi.HBV501G.kritikin.services.CompanyService;
@@ -43,8 +47,8 @@ public class CompanyController {
      * @return a list of all companies
      */
     @GetMapping(value = HomeController.APIURL + "/companies")
-    public List<Company> fetchAllcompanies() {
-        return companyService.findAll();
+    public ResponseEntity<List<Company>> fetchAllcompanies() {
+        return ResponseEntity.ok().body(companyService.findAll());
     }
 
     /**
@@ -55,8 +59,8 @@ public class CompanyController {
      * @return a particular company
      */
     @GetMapping(value = HomeController.APIURL + "/company/{id}")
-    public Company company(@PathVariable long id) {
-        return companyService.findById(id);
+    public ResponseEntity<Company> company(@PathVariable long id) {
+        return ResponseEntity.ok().body(companyService.findById(id));
     }
 
     /**
@@ -67,13 +71,13 @@ public class CompanyController {
      * @return the deleted company
      */
     @DeleteMapping(value = HomeController.APIURL + "/company/{id}")
-    public Company deleteCompany(@PathVariable long id) {
+    public ResponseEntity<?> deleteCompany(@PathVariable long id) {
         Company company = companyService.findById(id);
         if (company == null) {
             return null;
         }
         companyService.delete(company);
-        return company;
+        return ResponseEntity.noContent().build();
     }
 
     /**
@@ -85,14 +89,16 @@ public class CompanyController {
      * @return the inserted company or null if the company already exists
      */
     @PostMapping(value = HomeController.APIURL + "/company")
-    public Company addCompany(@RequestBody Company company) {
+    public ResponseEntity<Company> addCompany(@RequestBody Company company) {
         if (company == null || company.getName() == null || company.getName().equals("")) {
             return null;
         }
         if (companyService.findByName(company.getName()) != null) {
             return null;
         }
-        companyService.save(company);
-        return company;
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(HomeController.APIURL + "/company").toUriString());
+        return ResponseEntity.created(uri).body(companyService.save(company));
+
     }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import hi.HBV501G.kritikin.persistence.entites.Company;
 
 public interface CompanyService {
-    public void save(Company company);
+    public Company save(Company company);
 
     public void delete(Company company);
 
