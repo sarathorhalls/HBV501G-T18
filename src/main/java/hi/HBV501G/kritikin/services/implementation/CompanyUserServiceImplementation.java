@@ -15,14 +15,14 @@ import org.springframework.stereotype.Service;
 
 import hi.HBV501G.kritikin.persistence.entites.CompanyUser;
 import hi.HBV501G.kritikin.persistence.repositories.CompanyUserRepository;
-import hi.HBV501G.kritikin.services.CompanyService;
+// import hi.HBV501G.kritikin.services.CompanyService;
 import hi.HBV501G.kritikin.services.CompanyUserService;
 
 @Service
 public class CompanyUserServiceImplementation implements CompanyUserService {
 
     private final CompanyUserRepository companyUserRepository;
-    private final CompanyService companyService;
+    // private final CompanyService companyService;
 
     /**
      * Constructor for CompanyUserServiceImplementation which uses AutoWired to
@@ -32,10 +32,9 @@ public class CompanyUserServiceImplementation implements CompanyUserService {
      * @param companyService
      */
     @Autowired
-    public CompanyUserServiceImplementation(CompanyUserRepository companyUserRepository,
-            CompanyService companyService) {
+    public CompanyUserServiceImplementation(CompanyUserRepository companyUserRepository) {
         this.companyUserRepository = companyUserRepository;
-        this.companyService = companyService;
+        // this.companyService = companyService;
     }
 
     /**
