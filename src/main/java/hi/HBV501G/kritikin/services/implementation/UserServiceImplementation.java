@@ -159,15 +159,23 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
         return userRepository.getReferenceById(id);
     }
 
+    /**
+     * Implements the loadUserByUsername method from the UserDetailsService
+     * interface.
+     * This method is used by Spring Security to authenticate a user.
+     * 
+     * @param username the username of the user to be authenticated.
+     * @return a UserDetails object with the user's username, password, and
+     *         authorities the user has.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
         if (user == null) {
             logger.error("User not found in database");
             throw new UsernameNotFoundException("User not found in database");
-        } else {
-            logger.info("User: {}, found in database", username);
         }
+        logger.info("User: {}, found in database", username);
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user.getAuthorities().forEach(authority -> {
