@@ -178,11 +178,11 @@ export default function Company(props) {
         <>
             {reviewDialog}
             {questionDialog}
-            <Container maxWidth="lg">
+            <Container maxWidth="lg" sx={{ pt: 3, pb: 3 }}>
                 {company
                     ? (
                         <>
-                            <Typography variant="h2" mt={2} mb={1}>
+                            <Typography variant="h2" mb={1}>
                                 {company.name}
                             </Typography>
                             <Stack direction="row" spacing={1} mb={1}>
