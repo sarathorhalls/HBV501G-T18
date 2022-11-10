@@ -1,12 +1,15 @@
 package hi.HBV501G.kritikin.persistence.entites;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -30,6 +33,9 @@ public class User {
     @JsonManagedReference(value = "user-question")
     private List<Question> questions = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<Authority> authorities = new ArrayList<>();
+
     public User() {
     }
 
@@ -38,11 +44,13 @@ public class User {
         this.password = password;
     }
 
-    public User(String username, String password, List<Review> reviews, List<Question> questions) {
+    public User(String username, String password, List<Review> reviews, List<Question> questions,
+            Collection<Authority> authorities) {
         this.username = username;
         this.password = password;
         this.reviews = reviews;
         this.questions = questions;
+        this.authorities = authorities;
     }
 
     public Review addReview(Review review) {
@@ -91,4 +99,11 @@ public class User {
         this.questions = questions;
     }
 
+    public Collection<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Collection<Authority> authorities) {
+        this.authorities = authorities;
+    }
 }

@@ -10,6 +10,8 @@ package hi.HBV501G.kritikin.services.implementation;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ import hi.HBV501G.kritikin.services.CompanyService;
 public class CompanyServiceImplementation implements CompanyService {
 
     private final CompanyRepository companyRepository;
+
+    Logger logger = LoggerFactory.getLogger(CompanyServiceImplementation.class);
 
     /**
      * Constructor for CompanyServiceImplementation which uses Autowired to inject
@@ -43,8 +47,8 @@ public class CompanyServiceImplementation implements CompanyService {
      * @param company the company to be saved.
      */
     @Override
-    public void save(Company company) {
-        companyRepository.save(company);
+    public Company save(Company company) {
+        return companyRepository.save(company);
     }
 
     /**
