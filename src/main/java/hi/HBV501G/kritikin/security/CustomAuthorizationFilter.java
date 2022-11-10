@@ -25,6 +25,8 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import hi.HBV501G.kritikin.controllers.HomeController;
+
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     Logger logger = LoggerFactory.getLogger(CustomAuthorizationFilter.class);
@@ -32,7 +34,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        if (request.getServletPath().equals("/api/login")) {
+        if (request.getServletPath().equals(HomeController.APIURL + "/login")
+                || request.getServletPath().equals(HomeController.APIURL + "/refreshToken")) {
             filterChain.doFilter(request, response);
         } else {
             String authorizationHeader = request.getHeader("Authorization");
