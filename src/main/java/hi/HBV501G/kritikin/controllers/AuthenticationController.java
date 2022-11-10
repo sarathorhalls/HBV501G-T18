@@ -35,13 +35,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hi.HBV501G.kritikin.persistence.entites.Authority;
 import hi.HBV501G.kritikin.persistence.entites.User;
-import hi.HBV501G.kritikin.services.CompanyUserService;
 import hi.HBV501G.kritikin.services.UserService;
 
 @RestController
 public class AuthenticationController {
     private UserService userService;
-    private CompanyUserService companyUserService;
 
     /**
      * Constructor for the AuthenticationController which uses Autowired to inject
@@ -51,9 +49,8 @@ public class AuthenticationController {
      * @param companyUserService
      */
     @Autowired
-    public AuthenticationController(UserService userService, CompanyUserService companyUserService) {
+    public AuthenticationController(UserService userService) {
         this.userService = userService;
-        this.companyUserService = companyUserService;
     }
 
     /**
