@@ -48,7 +48,8 @@ public class SecurityConfiguration {
         String APIURL = CompanyController.APIURL;
         authenticationFilter.setFilterProcessesUrl(APIURL + "/auth/signin");
 
-        http.csrf().disable().authorizeRequests()
+        http.cors()
+                .and().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.GET, APIURL + "/companies", APIURL + "/company/**",
                         APIURL + "auth/refreshtoken/**", APIURL + "/auth/signup/**", APIURL + "/users/**")
                 .permitAll()
