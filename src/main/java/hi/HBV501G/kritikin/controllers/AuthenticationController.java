@@ -63,7 +63,7 @@ public class AuthenticationController {
      * 
      * @return a list of all users
      */
-    @GetMapping(value = HomeController.APIURL + "/users")
+    @GetMapping(value = CompanyController.APIURL + "/users")
     public List<User> fetchAllUsers() {
         return userService.findAll();
     }
@@ -76,7 +76,7 @@ public class AuthenticationController {
      *             request
      * @return the user that was inserted
      */
-    @PostMapping(value = HomeController.APIURL + "/auth/signup")
+    @PostMapping(value = CompanyController.APIURL + "/auth/signup")
     public ResponseEntity<User> addUser(@RequestBody User user) {
         if (user == null || user.getUsername() == null || user.getUsername().equals("")) {
             return ResponseEntity.badRequest().body(null);
@@ -85,7 +85,7 @@ public class AuthenticationController {
             return new ResponseEntity<>(null, null, HttpStatus.CONFLICT);
         }
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(HomeController.APIURL + "/auth/signup").toUriString());
+                .path(CompanyController.APIURL + "/auth/signup").toUriString());
         return ResponseEntity.created(uri).body(userService.save(user));
     }
 
@@ -95,7 +95,7 @@ public class AuthenticationController {
      * @param id the id of the user to be deleted
      * @return the user that was deleted
      */
-    @DeleteMapping(value = HomeController.APIURL + "/users/{id}")
+    @DeleteMapping(value = CompanyController.APIURL + "/users/{id}")
     public User deleteUser(@PathVariable long id) {
         User user = userService.findById(id);
         if (user == null) {
@@ -113,7 +113,7 @@ public class AuthenticationController {
      * @param response
      * @throws IOException
      */
-    @GetMapping(value = HomeController.APIURL + "/auth/refreshToken")
+    @GetMapping(value = CompanyController.APIURL + "/auth/refreshToken")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {

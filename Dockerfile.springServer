@@ -12,18 +12,21 @@ RUN mkdir -p $HOME
 WORKDIR $HOME
 
 #Copy files for client side
-ADD package.json $HOME
-RUN npm install
+#ADD package.json $HOME
+#RUN npm install
 
 #Copy files for serverside
 ADD pom.xml $HOME
+ADD .mvn $HOME
+ADD mvnw $HOME
+ADD mvnw.cmd $HOME
 RUN mvn verify --fail-never
 
 #Copy rest of files
-ADD . $HOME
+ADD src/main $HOME/src/main
 
 #build client side
-RUN npx webpack
+#RUN npx webpack
 
 #build server side
 RUN mvn package
