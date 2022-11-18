@@ -267,7 +267,7 @@ export default function Company(props) {
                                                 <Card>
                                                     <CardContent>
                                                         <Typography gutterBottom variant="h5" component="div">
-                                                            Notandanafn
+                                                            {/* {question.username} */}
                                                         </Typography>
                                                         <Typography variant="body2">
                                                             {question.questionText}

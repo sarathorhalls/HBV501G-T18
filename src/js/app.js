@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import Axios from "axios";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import { Root, ErrorPage, Company } from "./routes";
+import { Root, Company } from "./routes";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -15,6 +15,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
+import jwt_decode from "jwt-decode";
 
 const api = Axios.create({
     baseURL: "http://localhost:8338/api",
@@ -25,6 +26,29 @@ export default function App() {
     // Dialog open variables
     const [loginDialogOpen, setLoginDialogOpen] = useState(false);
     const [signupDialogOpen, setSignupDialogOpen] = useState(false);
+
+    useEffect(() => {
+        // Check if user is logged in on load
+        const accessToken = localStorage.getItem("access_token");
+        if (accessToken) {
+            // Decode token
+            const data = jwt_decode(accessToken);
+
+            if (data.exp <= Date.now() / 1000) {
+                // If token is expired, remove it
+                // data.exp is in seconds but Date.now in ms
+                localStorage.removeItem("access_token");
+            } else {
+                // Else, set authentication info state locally
+                setAuthInfo(
+                    {
+                        "username": data.sub,
+                        "access_token": accessToken
+                    }
+                );
+            }
+        }
+    }, []);
 
     /**
      * Closes the "log in" dialog
@@ -44,7 +68,11 @@ export default function App() {
      * Logs the user out
      */
     function logOut() {
+        // Set authentication state to null
         setAuthInfo(null);
+
+        // Remove stored access key
+        localStorage.removeItem("access_key");
     }
 
     // TODO: add jsdoc
@@ -78,6 +106,9 @@ export default function App() {
 
         // Set authentication info state
         setAuthInfo(response.data);
+
+        // Store token in localStorage
+        localStorage.setItem("access_token", response.data.access_token);
         
         // Close dialog
         handleCloseLoginDialog();
