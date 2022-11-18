@@ -25,11 +25,11 @@ public class Company {
     private String address;
     private String openingHours;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "company-review")
     private List<Review> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "company-question")
     private List<Question> questions = new ArrayList<>();
 

@@ -19,12 +19,12 @@ public class Review {
     private long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "company_id", referencedColumnName = "company_id")
+    @JoinColumn(name = "company_id", referencedColumnName = "id")
     @JsonBackReference(value = "company-review")
     private Company company;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonBackReference(value = "user-review")
     private User user;
 
