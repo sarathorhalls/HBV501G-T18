@@ -11,9 +11,13 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
 
 const api = Axios.create({
-    baseURL: "http://localhost:8080/api",
+    baseURL: "http://localhost:8338/api",
 });
 
 const router = createBrowserRouter([
@@ -33,6 +37,57 @@ export default function App() {
     // TODO: implement actual authentication
     const [loggedIn, setLoggedIn] = useState(false);
     const [username, setUsername] = useState("janedoe");
+    // Dialog open variables
+    const [loginDialogOpen, setLoginDialogOpen] = useState(false);
+    const [signupDialogOpen, setSignupDialogOpen] = useState(false);
+
+    /**
+     * Closes the "log in" dialog
+     */
+    function handleCloseLoginDialog() {
+        setLoginDialogOpen(false);
+    }
+
+    /**
+     * Closes the "sign up" dialog
+     */
+    function handleCloseSignupDialog() {
+        setSignupDialogOpen(false);
+    }
+
+    // TODO: add jsdoc
+    async function logIn(event) {
+        // Prevent GET submission + reload
+        event.preventDefault();
+        
+        // Get data
+        const form = event.target;
+        const username = form.username.value;
+        const password = form.password.value;
+        
+        // TODO: handle errors/success
+        const response = await api.post(`/auth/signin`, { username, password });
+        
+        // Close dialog
+        handleCloseLoginDialog();
+    }
+
+    // TODO: add jsdoc
+    async function signUp(event) {
+        // Prevent GET submission + reload
+        event.preventDefault();
+        
+        // Get data
+        const form = event.target;
+        const username = form.username.value;
+        const password = form.password.value;
+        
+        // TODO: handle errors/success
+        const response = await api.post(`/auth/signup`, { username, password });
+        
+        // Close dialog
+        handleCloseSignupDialog();
+    }
 
     const appToolbar = (
         <AppBar position="sticky">
@@ -74,12 +129,12 @@ export default function App() {
                                 <Button
                                     variant="text"
                                     color="inherit"
-                                    onClick={() => setLoggedIn(true)}
+                                    onClick={() => setLoginDialogOpen(true)}
                                 >Skrá inn</Button>
                                 <Button
                                     variant="text"
                                     color="inherit"
-                                    onClick={() => window.alert("Pressed sign up")}
+                                    onClick={() => setSignupDialogOpen(true)}
                                 >Stofna reikning</Button>
                             </>
                         )
@@ -89,9 +144,83 @@ export default function App() {
         </AppBar>
     );
 
+    const loginDialog = (
+        <Dialog open={loginDialogOpen} onClose={handleCloseLoginDialog}>
+            <DialogTitle>Skrá inn</DialogTitle>
+            <DialogContent>
+                <form id="question_form" onSubmit={logIn}>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="login_username"
+                        name="username"
+                        label="Notandanafn"
+                        type="text"
+                        fullWidth
+                    />
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="login_password"
+                        name="password"
+                        label="Lykilorð"
+                        type="password"
+                        fullWidth
+                    />
+                    <DialogActions>
+                        <Button onClick={handleCloseLoginDialog}>
+                            Loka
+                        </Button>
+                        <Button type="submit">
+                            Skrá inn
+                        </Button>
+                    </DialogActions>
+                </form>
+            </DialogContent>
+        </Dialog>
+    );
+    
+    const signupDialog = (
+        <Dialog open={signupDialogOpen} onClose={handleCloseSignupDialog}>
+            <DialogTitle>Nýskrá</DialogTitle>
+            <DialogContent>
+                <form id="question_form" onSubmit={signUp}>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="signup_username"
+                        name="username"
+                        label="Notandanafn"
+                        type="text"
+                        fullWidth
+                    />
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="signup_password"
+                        name="password"
+                        label="Lykilorð"
+                        type="password"
+                        fullWidth
+                    />
+                    <DialogActions>
+                        <Button onClick={handleCloseSignupDialog}>
+                            Loka
+                        </Button>
+                        <Button type="submit">
+                            Stofna reikning
+                        </Button>
+                    </DialogActions>
+                </form>
+            </DialogContent>
+        </Dialog>
+    );
+
     return (
         <React.StrictMode>
             <CssBaseline />
+            { loginDialog }
+            { signupDialog }
             { appToolbar }
             <RouterProvider router={router} />
         </React.StrictMode>
