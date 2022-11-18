@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -28,6 +27,8 @@ import hi.HBV501G.kritikin.services.CompanyService;
 
 @RestController
 public class CompanyController {
+
+    public static final String APIURL = "/api";
 
     private CompanyService companyService;
 
@@ -48,7 +49,7 @@ public class CompanyController {
      * 
      * @return a list of all companies
      */
-    @GetMapping(value = HomeController.APIURL + "/companies")
+    @GetMapping(value = APIURL + "/companies")
     public ResponseEntity<List<Company>> fetchAllcompanies() {
         return ResponseEntity.ok().body(companyService.findAll());
     }
@@ -60,7 +61,7 @@ public class CompanyController {
      * @param id the id of the company
      * @return a particular company
      */
-    @GetMapping(value = HomeController.APIURL + "/company/{id}")
+    @GetMapping(value = APIURL + "/company/{id}")
     public ResponseEntity<Company> company(@PathVariable long id) {
         return ResponseEntity.ok().body(companyService.findById(id));
     }
@@ -72,7 +73,7 @@ public class CompanyController {
      * @param id the id of the company to be deleted
      * @return the deleted company
      */
-    @DeleteMapping(value = HomeController.APIURL + "/company/{id}")
+    @DeleteMapping(value = APIURL + "/company/{id}")
     public ResponseEntity<?> deleteCompany(@PathVariable long id) {
         Company company = companyService.findById(id);
         if (company == null) {
@@ -90,7 +91,7 @@ public class CompanyController {
      *                request
      * @return the inserted company or null if the company already exists
      */
-    @PostMapping(value = HomeController.APIURL + "/company")
+    @PostMapping(value = APIURL + "/company")
     public ResponseEntity<Company> addCompany(@RequestBody Company company) {
         if (company == null || company.getName() == null || company.getName().equals("")) {
             return ResponseEntity.badRequest().body(null);
@@ -99,7 +100,7 @@ public class CompanyController {
             return new ResponseEntity<>(null, null, HttpStatus.CONFLICT);
         }
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(HomeController.APIURL + "/company").toUriString());
+                .path(APIURL + "/company").toUriString());
         return ResponseEntity.created(uri).body(companyService.save(company));
 
     }

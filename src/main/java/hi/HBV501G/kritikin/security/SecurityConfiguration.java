@@ -2,6 +2,7 @@ package hi.HBV501G.kritikin.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -11,7 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import hi.HBV501G.kritikin.controllers.HomeController;
+import hi.HBV501G.kritikin.controllers.CompanyController;
 
 @Configuration
 @EnableWebSecurity
@@ -44,9 +45,19 @@ public class SecurityConfiguration {
         CustomAuthenticationFilter authenticationFilter = new CustomAuthenticationFilter(
                 authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)));
         // Set the filter login url to /api/login
-        authenticationFilter.setFilterProcessesUrl(HomeController.APIURL + "/auth/signin");
+        String APIURL = CompanyController.APIURL;
+        authenticationFilter.setFilterProcessesUrl(APIURL + "/auth/signin");
 
-        http.csrf().disable().authorizeRequests().anyRequest().permitAll()
+        http.csrf().disable().authorizeRequests()
+                .antMatchers(HttpMethod.GET, APIURL + "/companies", APIURL + "/company/**",
+                        APIURL + "auth/refreshtoken/**", APIURL + "/auth/signup/**", APIURL + "/users/**")
+                .permitAll()
+                .antMatchers(HttpMethod.POST, APIURL + "/auth/signup/**").permitAll()
+                .antMatchers(HttpMethod.POST, APIURL + "/company/**/review/**").authenticated()
+                .antMatchers(HttpMethod.POST, APIURL + "/company/**/question/**").authenticated()
+                .antMatchers(HttpMethod.POST, APIURL + "/company/**/answer/**").hasRole("COMPANY")
+                .antMatchers(HttpMethod.DELETE, APIURL + "/company/**", APIURL + "/users/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, APIURL + "/company/**").hasRole("ADMIN")
                 .and().httpBasic()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilter(authenticationFilter)

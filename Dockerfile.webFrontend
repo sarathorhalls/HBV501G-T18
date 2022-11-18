@@ -1,0 +1,17 @@
+#Install stuff onto the image
+FROM node:16 AS webpack
+ENV HOME=/usr/src/web
+RUN mkdir -p $HOME
+WORKDIR $HOME
+
+ADD package.json $HOME
+RUN npm install
+
+ADD webpack.config.js $HOME
+ADD public $HOME/public
+ADD src/js $HOME/src/js
+RUN npx webpack
+
+FROM nginx:latest
+COPY --from=webpack /usr/src/web/public /usr/share/nginx/html
+EXPOSE 80

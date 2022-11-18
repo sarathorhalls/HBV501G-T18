@@ -25,7 +25,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import hi.HBV501G.kritikin.controllers.HomeController;
+import hi.HBV501G.kritikin.controllers.CompanyController;
 
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
@@ -34,8 +34,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        if (request.getServletPath().equals(HomeController.APIURL + "/auth/signup")
-                || request.getServletPath().equals(HomeController.APIURL + "/auth/refreshToken")) {
+        if (request.getServletPath().equals(CompanyController.APIURL + "/auth/signup")
+                || request.getServletPath().equals(CompanyController.APIURL + "/auth/refreshToken")) {
             filterChain.doFilter(request, response);
         } else {
             String authorizationHeader = request.getHeader("Authorization");
