@@ -10,9 +10,19 @@ services:
             - 5432:5432
         volumes:
             - data:/var/lib/postgresql
-    web:
-        build: .
+    server:
+        build:
+            context: .
+            dockerfile: Dockerfile.springServer
         depends_on:
             - postgres
         ports:
-            - 8080:8080
+            - 8338:8080
+    web:
+        build:
+            context: .
+            dockerfile: Dockerfile.webFrontend
+        depends_on:
+            - server
+        ports:
+            - 8080:80
