@@ -75,8 +75,19 @@ export default function App() {
         params.append("username", username);
         params.append("password", password);
         
-        // TODO: handle errors/success
-        const response = await api.post("/auth/signin", params);
+        let response;
+        try {
+            response = await api.post("/auth/signin", params);
+        } catch (e) {
+            if (e.response) {
+                if (e.response.status === 401) {
+                    window.alert("Rangt notandanafn eða lykilorð");
+                } else {
+                    window.alert(`Villa: ${e.response.data}`);
+                }
+            }
+            return;
+        }
 
         // Set authentication info state
         setAuthInfo(response.data);
@@ -95,8 +106,19 @@ export default function App() {
         const username = form.username.value;
         const password = form.password.value;
         
-        // TODO: handle errors/success
-        const response = await api.post(`/auth/signup`, { username, password });
+        let response;
+        try {
+            response = await api.post(`/auth/signup`, { username, password });
+        } catch (e) {
+            if (e.response) {
+                if (e.response.status === 400) {
+                    window.alert("Villa: Vantar notandanafn og/eða lykilorð");
+                } else if (e.response.status === 409) {
+                    window.alert("Villa: Notandi er nú þegar til");
+                }
+            }
+            return;
+        }
         
         // Close dialog
         handleCloseSignupDialog();
