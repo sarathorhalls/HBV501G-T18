@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -35,6 +36,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         }
 
         @Override
+        @CrossOrigin(origins = "http://localhost:8080")
         public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
                         throws AuthenticationException {
                 String username = request.getParameter("username");
