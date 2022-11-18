@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 import Axios from "axios";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { Root, ErrorPage, Company } from "./routes";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppBar from "@mui/material/AppBar";
@@ -19,19 +19,6 @@ import DialogActions from "@mui/material/DialogActions";
 const api = Axios.create({
     baseURL: "http://localhost:8338/api",
 });
-
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <Root />,
-        errorElement: <ErrorPage />
-    },
-    {
-        path: "/company/:id",
-        element: <Company api={api} />
-        // TODO: define errorElement for not found
-    }
-]);
 
 export default function App() {
     const [authInfo, setAuthInfo] = useState(null);
@@ -257,7 +244,12 @@ export default function App() {
             { loginDialog }
             { signupDialog }
             { appToolbar }
-            <RouterProvider router={router} />
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Root />} />
+                    <Route path="/company/:id" element={<Company api={api} authInfo={authInfo} />} />
+                </Routes>
+            </BrowserRouter>
         </React.StrictMode>
     );
 }
