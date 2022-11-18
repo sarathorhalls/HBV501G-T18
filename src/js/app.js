@@ -71,6 +71,7 @@ export default function App() {
         // TODO: handle errors/success
         const response = await api.post("/auth/signin", params);
 
+        // Set authentication info state
         setAuthInfo(response.body);
         
         // Close dialog
