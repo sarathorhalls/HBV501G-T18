@@ -1,6 +1,7 @@
 package hi.HBV501G.kritikin.controllers;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -20,12 +21,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -72,16 +76,17 @@ public class AuthenticationController {
      *             request
      * @return the user that was inserted
      */
-    @PostMapping(value = HomeController.APIURL + "/user")
-    public User addUser(@RequestBody User user) {
+    @PostMapping(value = HomeController.APIURL + "/auth/signup")
+    public ResponseEntity<User> addUser(@RequestBody User user) {
         if (user == null || user.getUsername() == null || user.getUsername().equals("")) {
-            return null;
+            return ResponseEntity.badRequest().body(null);
         }
         if (userService.findByUsername(user.getUsername()) != null) {
-            return null;
+            return new ResponseEntity<>(null, null, HttpStatus.CONFLICT);
         }
-        userService.save(user);
-        return user;
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(HomeController.APIURL + "/auth/signup").toUriString());
+        return ResponseEntity.created(uri).body(userService.save(user));
     }
 
     /**
