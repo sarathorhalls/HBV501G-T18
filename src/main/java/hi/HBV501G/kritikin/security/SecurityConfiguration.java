@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,6 +15,7 @@ import hi.HBV501G.kritikin.controllers.HomeController;
 
 @Configuration
 @EnableWebSecurity
+// @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
     /**
@@ -42,7 +44,7 @@ public class SecurityConfiguration {
         CustomAuthenticationFilter authenticationFilter = new CustomAuthenticationFilter(
                 authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)));
         // Set the filter login url to /api/login
-        authenticationFilter.setFilterProcessesUrl(HomeController.APIURL + "/login");
+        authenticationFilter.setFilterProcessesUrl(HomeController.APIURL + "/auth/signin");
 
         http.csrf().disable().authorizeRequests().anyRequest().permitAll()
                 .and().httpBasic()

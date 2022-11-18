@@ -113,7 +113,7 @@ public class AuthenticationController {
      * @param response
      * @throws IOException
      */
-    @GetMapping(value = HomeController.APIURL + "/refreshToken")
+    @GetMapping(value = HomeController.APIURL + "/auth/refreshToken")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
