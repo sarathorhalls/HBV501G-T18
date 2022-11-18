@@ -1,5 +1,7 @@
 package hi.HBV501G.kritikin.controllers;
 
+import java.util.Base64;
+
 /**
  * This class is the controller for everything related to questions. It handles the
  * creation and updating of questions and answers from REST requests.
@@ -9,13 +11,14 @@ package hi.HBV501G.kritikin.controllers;
 
 import java.util.List;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import hi.HBV501G.kritikin.persistence.entites.Question;
@@ -26,6 +29,8 @@ import hi.HBV501G.kritikin.services.QuestionService;
 public class QuestionController {
 
     private QuestionService questionService;
+
+    Logger logger = org.slf4j.LoggerFactory.getLogger(QuestionController.class);
 
     /**
      * Constructor for QuestionController which uses autowired to inject the
@@ -78,9 +83,19 @@ public class QuestionController {
      * @return the question that was inserted
      */
     @PostMapping(value = CompanyController.APIURL + "/company/{id}/question")
-    public Question addQuestion(@RequestBody Question question, @RequestParam long userId,
-            @PathVariable("id") long companyId) {
-        return questionService.addQuestion(question, userId, companyId);
+    public Question addQuestion(@RequestBody Question question,
+            @PathVariable("id") long companyId, @RequestHeader("Authorization") String auth) {
+                logger.info("addQuestion() called with authorization header: " + auth);
+                String token = auth.replace("Bearer ", "").split("\\.")[1];
+                String decodedPayload = new String(Base64.getDecoder().decode(token));
+                try {
+                    Long userId = Long.parseLong(decodedPayload.split(",")[1].split(":")[1].split("\"")[1]);
+                    logger.info("User id: " + userId);
+                    return questionService.addQuestion(question, userId, companyId);
+                } catch (Exception e) {
+                    logger.error("Error parsing user id from token: " + e.getMessage());
+                    return null;
+                }
     }
 
     /**
