@@ -83,26 +83,26 @@ export default function Company(props) {
         const response = await props.api.post(`/company/${id}/review`, { starRating: starPickerRating, reviewText: text }, { params: { userId: 7 } });
         // Load updated company information
         loadCompany();
-        
+
         // Close dialog
         handleCloseReviewDialog();
     }
-    
+
     // TODO: add jsdoc
     async function submitQuestion(event) {
         // Prevent GET submission + reload
         event.preventDefault();
-        
+
         // Get data
         const form = event.target;
         const text = form.text.value;
-        
+
         // TODO: add user id
         // TODO: handle errors/success
         const response = await props.api.post(`/company/${id}/question`, { questionText: text }, { params: { userId: 7 } });
         // Load updated company information
         loadCompany();
-        
+
         // Close dialog
         handleCloseQuestionDialog();
     }

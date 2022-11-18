@@ -53,6 +53,13 @@ export default function App() {
         setSignupDialogOpen(false);
     }
 
+    /**
+     * Logs the user out
+     */
+    function logOut() {
+        setAuthInfo(null);
+    }
+
     // TODO: add jsdoc
     async function logIn(event) {
         // Prevent GET submission + reload
@@ -72,7 +79,7 @@ export default function App() {
         const response = await api.post("/auth/signin", params);
 
         // Set authentication info state
-        setAuthInfo(response.body);
+        setAuthInfo(response.data);
         
         // Close dialog
         handleCloseLoginDialog();
@@ -125,8 +132,7 @@ export default function App() {
                             <Button
                                 variant="text"
                                 color="inherit"
-                                // TODO: add logout
-                                onClick={() => window.alert("Logged out!")}
+                                onClick={logOut}
                             >
                                 Skrá út {authInfo.username}
                             </Button>
