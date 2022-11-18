@@ -12,6 +12,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -92,10 +93,10 @@ public class CompanyController {
     @PostMapping(value = HomeController.APIURL + "/company")
     public ResponseEntity<Company> addCompany(@RequestBody Company company) {
         if (company == null || company.getName() == null || company.getName().equals("")) {
-            return null;
+            return ResponseEntity.badRequest().body(null);
         }
         if (companyService.findByName(company.getName()) != null) {
-            return null;
+            return new ResponseEntity<>(null, null, HttpStatus.CONFLICT);
         }
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(HomeController.APIURL + "/company").toUriString());
