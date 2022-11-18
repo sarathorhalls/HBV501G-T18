@@ -128,6 +128,7 @@ public class AuthenticationController {
                 User user = userService.findByUsername(username);
                 String accessToken = JWT.create()
                         .withSubject(user.getUsername())
+                        .withAudience(Long.toString(user.getId()))
                         .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
                         .withIssuer(request.getRequestURL().toString())
                         .withClaim("authorities",

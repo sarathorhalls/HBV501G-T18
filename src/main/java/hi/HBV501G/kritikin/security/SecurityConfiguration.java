@@ -1,5 +1,6 @@
 package hi.HBV501G.kritikin.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,11 +14,19 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import hi.HBV501G.kritikin.controllers.CompanyController;
+import hi.HBV501G.kritikin.services.UserService;
 
 @Configuration
 @EnableWebSecurity
 // @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
+
+        private final UserService userService;
+
+        @Autowired
+        public SecurityConfiguration(UserService userService) {
+                this.userService = userService;
+        }
 
     /**
      * Allows us to use the AuthenticationManager in our custom filter
@@ -43,7 +52,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // Create the authentication filter
         CustomAuthenticationFilter authenticationFilter = new CustomAuthenticationFilter(
-                authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)));
+                authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), userService);
         // Set the filter login url to /api/login
         String APIURL = CompanyController.APIURL;
         authenticationFilter.setFilterProcessesUrl(APIURL + "/auth/signin");
