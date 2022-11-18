@@ -34,9 +34,7 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-    // TODO: implement actual authentication
-    const [loggedIn, setLoggedIn] = useState(false);
-    const [username, setUsername] = useState("janedoe");
+    const [authInfo, setAuthInfo] = useState(null);
     // Dialog open variables
     const [loginDialogOpen, setLoginDialogOpen] = useState(false);
     const [signupDialogOpen, setSignupDialogOpen] = useState(false);
@@ -64,9 +62,16 @@ export default function App() {
         const form = event.target;
         const username = form.username.value;
         const password = form.password.value;
+
+        // Create URL search params to log in with
+        const params = new URLSearchParams();
+        params.append("username", username);
+        params.append("password", password);
         
         // TODO: handle errors/success
-        const response = await api.post(`/auth/signin`, { username, password });
+        const response = await api.post("/auth/signin", params);
+
+        setAuthInfo(response.body);
         
         // Close dialog
         handleCloseLoginDialog();
@@ -114,14 +119,15 @@ export default function App() {
                 />
                 <Box sx={{ flexGrow: 1 }} />
                 <Box>
-                    {loggedIn
+                    {authInfo
                         ? (
                             <Button
                                 variant="text"
                                 color="inherit"
-                                onClick={() => setLoggedIn(false)}
+                                // TODO: add logout
+                                onClick={() => window.alert("Logged out!")}
                             >
-                                Skrá út {username}
+                                Skrá út {authInfo.username}
                             </Button>
                         )
                         : (
