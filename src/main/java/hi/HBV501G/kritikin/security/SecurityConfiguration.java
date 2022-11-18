@@ -11,7 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import hi.HBV501G.kritikin.controllers.HomeController;
+import hi.HBV501G.kritikin.controllers.CompanyController;
 
 @Configuration
 @EnableWebSecurity
@@ -44,7 +44,7 @@ public class SecurityConfiguration {
         CustomAuthenticationFilter authenticationFilter = new CustomAuthenticationFilter(
                 authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)));
         // Set the filter login url to /api/login
-        authenticationFilter.setFilterProcessesUrl(HomeController.APIURL + "/auth/signin");
+        authenticationFilter.setFilterProcessesUrl(CompanyController.APIURL + "/auth/signin");
 
         http.csrf().disable().authorizeRequests().anyRequest().permitAll()
                 .and().httpBasic()
