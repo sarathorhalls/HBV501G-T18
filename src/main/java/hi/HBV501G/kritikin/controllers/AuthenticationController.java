@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +43,7 @@ import hi.HBV501G.kritikin.persistence.entites.User;
 import hi.HBV501G.kritikin.services.UserService;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:8080")
 public class AuthenticationController {
     private UserService userService;
 
@@ -126,6 +128,7 @@ public class AuthenticationController {
                 User user = userService.findByUsername(username);
                 String accessToken = JWT.create()
                         .withSubject(user.getUsername())
+                        .withAudience(Long.toString(user.getId()))
                         .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
                         .withIssuer(request.getRequestURL().toString())
                         .withClaim("authorities",

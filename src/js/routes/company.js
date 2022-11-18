@@ -80,29 +80,29 @@ export default function Company(props) {
 
         // TODO: add user id
         // TODO: handle errors/success
-        const response = await props.api.post(`/company/${id}/review`, { starRating: starPickerRating, reviewText: text }, { params: { userId: 7 } });
+        const response = await props.api.post(`/company/${id}/review`, { starRating: starPickerRating, reviewText: text }, { headers: { "Authorization": `Bearer ${props.authInfo.access_token}` } });
         // Load updated company information
         loadCompany();
-        
+
         // Close dialog
         handleCloseReviewDialog();
     }
-    
+
     // TODO: add jsdoc
     async function submitQuestion(event) {
         // Prevent GET submission + reload
         event.preventDefault();
-        
+
         // Get data
         const form = event.target;
         const text = form.text.value;
-        
+
         // TODO: add user id
         // TODO: handle errors/success
-        const response = await props.api.post(`/company/${id}/question`, { questionText: text }, { params: { userId: 7 } });
+        const response = await props.api.post(`/company/${id}/question`, { questionText: text }, { headers: { "Authorization": `Bearer ${props.authInfo.access_token}` } });
         // Load updated company information
         loadCompany();
-        
+
         // Close dialog
         handleCloseQuestionDialog();
     }
@@ -252,6 +252,7 @@ export default function Company(props) {
                             <Button
                                 variant="contained"
                                 onClick={() => setReviewDialogOpen(true)}
+                                disabled={props.authInfo === null}
                             >
                                 Skrifa umsögn
                             </Button>
@@ -266,7 +267,7 @@ export default function Company(props) {
                                                 <Card>
                                                     <CardContent>
                                                         <Typography gutterBottom variant="h5" component="div">
-                                                            Notandanafn
+                                                            {/* {question.username} */}
                                                         </Typography>
                                                         <Typography variant="body2">
                                                             {question.questionText}
@@ -301,6 +302,7 @@ export default function Company(props) {
                             <Button
                                 variant="contained"
                                 onClick={() => setQuestionDialogOpen(true)}
+                                disabled={props.authInfo === null}
                             >
                                 Spyrja spurningar
                             </Button>
