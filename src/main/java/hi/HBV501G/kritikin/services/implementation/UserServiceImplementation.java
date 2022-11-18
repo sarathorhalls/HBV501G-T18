@@ -24,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import hi.HBV501G.kritikin.persistence.entites.Authority;
+import hi.HBV501G.kritikin.persistence.entites.EAuthority;
 import hi.HBV501G.kritikin.persistence.entites.User;
 import hi.HBV501G.kritikin.persistence.repositories.AuthorityRepository;
 import hi.HBV501G.kritikin.persistence.repositories.UserRepository;
@@ -94,7 +95,7 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
         logger.info("getting user: {} from database", username);
         User user = userRepository.findByUsername(username);
         logger.info("getting authority: {} from database", authorityName);
-        Authority authority = authorityRepository.findByName(authorityName);
+        Authority authority = authorityRepository.findByName(EAuthority.valueOf(authorityName));
         logger.info("adding authority: {} to user: {}", authorityName, username);
         user.getAuthorities().add(authority);
         return userRepository.save(user);
@@ -179,7 +180,7 @@ public class UserServiceImplementation implements UserService, UserDetailsServic
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user.getAuthorities().forEach(authority -> {
-            authorities.add(new SimpleGrantedAuthority(authority.getName()));
+            authorities.add(new SimpleGrantedAuthority(authority.getName().toString()));
         });
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),

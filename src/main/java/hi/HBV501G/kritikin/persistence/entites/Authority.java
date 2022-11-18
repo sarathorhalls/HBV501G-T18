@@ -1,27 +1,27 @@
 package hi.HBV501G.kritikin.persistence.entites;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "authorities")
 public class Authority {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private EAuthority name;
 
     public Authority() {
     }
 
-    public Authority(String name) {
-        this.name = name;
-    }
-
-    public Authority(Long id, String name) {
-        this.id = id;
+    public Authority(EAuthority name) {
         this.name = name;
     }
 
@@ -33,11 +33,11 @@ public class Authority {
         this.id = id;
     }
 
-    public String getName() {
+    public EAuthority getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(EAuthority name) {
         this.name = name;
     }
 }

@@ -9,9 +9,13 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.springframework.lang.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -22,7 +26,10 @@ public class User {
     @GeneratedValue
     private long id;
 
+    @NonNull
     private String username;
+
+    @NonNull
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -34,6 +41,7 @@ public class User {
     private List<Question> questions = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_authority", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "authority_id"))
     private Collection<Authority> authorities = new ArrayList<>();
 
     public User() {
