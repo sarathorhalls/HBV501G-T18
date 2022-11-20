@@ -10,10 +10,12 @@ package hi.HBV501G.kritikin.services.implementation;
 
 import java.util.List;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hi.HBV501G.kritikin.persistence.entites.Question;
+import hi.HBV501G.kritikin.persistence.entites.DTOs.QuestionJSON;
 import hi.HBV501G.kritikin.persistence.repositories.QuestionRepository;
 import hi.HBV501G.kritikin.services.CompanyService;
 import hi.HBV501G.kritikin.services.QuestionService;
@@ -21,6 +23,8 @@ import hi.HBV501G.kritikin.services.UserService;
 
 @Service
 public class QuestionServiceImplementation implements QuestionService {
+
+    Logger logger = org.slf4j.LoggerFactory.getLogger(QuestionServiceImplementation.class);
 
     QuestionRepository questionRepository;
     CompanyService companyService;
@@ -90,8 +94,8 @@ public class QuestionServiceImplementation implements QuestionService {
      * @return a list of all questions with the given company id.
      */
     @Override
-    public List<Question> findByCompany(long companyId) {
-        return questionRepository.findByCompanyId(companyId);
+    public List<QuestionJSON> findByCompany(long companyId) {
+        return QuestionJSON.convert(questionRepository.findByCompanyId(companyId));
     }
 
     /**
@@ -101,8 +105,8 @@ public class QuestionServiceImplementation implements QuestionService {
      * @return a list of all questions with the given user id.
      */
     @Override
-    public List<Question> findByUser(long userId) {
-        return questionRepository.findByUserId(userId);
+    public List<QuestionJSON> findByUser(long userId) {
+        return QuestionJSON.convert(questionRepository.findByUserId(userId));
     }
 
     /**
@@ -115,14 +119,17 @@ public class QuestionServiceImplementation implements QuestionService {
      */
     @Override
     public Question addQuestion(Question question, long userId, long companyId) {
+        logger.info("Adding question to database");
         if (question.getCompany() == null) {
+            logger.info("added company nr: {} to question", companyId);
             question.setCompany(companyService.getReferenceById(companyId));
         }
 
         if (question.getUser() == null) {
+            logger.info("added user nr: {} to question", userId);
             question.setUser(userService.getReferenceById(userId));
         }
-
+        logger.info("Saving question to database");
         questionRepository.save(question);
         return question;
     }
