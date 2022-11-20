@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import hi.HBV501G.kritikin.persistence.entites.Question;
+import hi.HBV501G.kritikin.persistence.entites.DTOs.QuestionJSON;
 import hi.HBV501G.kritikin.services.QuestionService;
 
 @RestController
@@ -52,7 +53,7 @@ public class QuestionController {
      * @return a list of all questions for a particular company
      */
     @GetMapping(value = CompanyController.APIURL + "/company/{id}/questions")
-    public List<Question> fetchQuestionsByCompany(@PathVariable long id) {
+    public List<QuestionJSON> fetchQuestionsByCompany(@PathVariable long id) {
         return questionService.findByCompany(id);
     }
 
@@ -65,7 +66,7 @@ public class QuestionController {
      * @return a list of all questions for a particular user
      */
     @GetMapping(value = CompanyController.APIURL + "/user/{id}/questions")
-    public List<Question> fetchQuestionsByUser(@PathVariable long id) {
+    public List<QuestionJSON> fetchQuestionsByUser(@PathVariable long id) {
         return questionService.findByUser(id);
     }
 
@@ -85,17 +86,17 @@ public class QuestionController {
     @PostMapping(value = CompanyController.APIURL + "/company/{id}/question")
     public Question addQuestion(@RequestBody Question question,
             @PathVariable("id") long companyId, @RequestHeader("Authorization") String auth) {
-                logger.info("addQuestion() called with authorization header: " + auth);
-                String token = auth.replace("Bearer ", "").split("\\.")[1];
-                String decodedPayload = new String(Base64.getDecoder().decode(token));
-                try {
-                    Long userId = Long.parseLong(decodedPayload.split(",")[1].split(":")[1].split("\"")[1]);
-                    logger.info("User id: " + userId);
-                    return questionService.addQuestion(question, userId, companyId);
-                } catch (Exception e) {
-                    logger.error("Error parsing user id from token: " + e.getMessage());
-                    return null;
-                }
+        logger.info("addQuestion() called with authorization header: " + auth);
+        String token = auth.replace("Bearer ", "").split("\\.")[1];
+        String decodedPayload = new String(Base64.getDecoder().decode(token));
+        try {
+            Long userId = Long.parseLong(decodedPayload.split(",")[1].split(":")[1].split("\"")[1]);
+            logger.info("User id: " + userId);
+            return questionService.addQuestion(question, userId, companyId);
+        } catch (Exception e) {
+            logger.error("Error parsing user id from token: " + e.getMessage());
+            return null;
+        }
     }
 
     /**
