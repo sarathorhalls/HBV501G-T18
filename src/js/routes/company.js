@@ -7,30 +7,30 @@ import Stack from "@mui/material/Stack";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions"
+import DialogActions from "@mui/material/DialogActions";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Unstable_Grid2";
-import WebIcon from '@mui/icons-material/Web';
-import PhoneIcon from '@mui/icons-material/Phone';
-import ScheduleIcon from '@mui/icons-material/Schedule';
-import BusinessIcon from '@mui/icons-material/Business';
+import WebIcon from "@mui/icons-material/Web";
+import PhoneIcon from "@mui/icons-material/Phone";
+import ScheduleIcon from "@mui/icons-material/Schedule";
+import BusinessIcon from "@mui/icons-material/Business";
 import { useParams } from "react-router-dom";
 import { StarPicker, StarRating } from "../components";
 import Axios from "axios";
 
 /**
  * Props object for the company page
- * 
+ *
  * @typedef {object} CompanyProps
  * @property {Axios} api Axios object connected to the REST API
  */
 
 /**
  * Company page component
- * 
+ *
  * @component
  * @param {CompanyProps} props
  */
@@ -38,6 +38,8 @@ export default function Company(props) {
     // Data
     const { id } = useParams();
     const [company, setCompany] = useState(null);
+    const [reviews, setReviews] = useState(null);
+    const [questions, setQuestions] = useState(null);
     // Dialog open variables
     const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
     const [questionDialogOpen, setQuestionDialogOpen] = useState(false);
@@ -51,6 +53,17 @@ export default function Company(props) {
         const response = await props.api.get(`/company/${id}`);
         setCompany(response.data);
         // TODO: throw error if nothing found
+    }
+
+    async function loadReviews() {
+        const response = await props.api.get(`/company/${id}/reviews`);
+        setReviews(response.data);
+        console.log("running loadReviews");
+    }
+
+    async function loadQuestions() {
+        const response = await props.api.get(`/company/${id}/questions`);
+        setQuestions(response.data);
     }
 
     /**
@@ -80,9 +93,13 @@ export default function Company(props) {
 
         // TODO: add user id
         // TODO: handle errors/success
-        const response = await props.api.post(`/company/${id}/review`, { starRating: starPickerRating, reviewText: text }, { headers: { "Authorization": `Bearer ${props.authInfo.access_token}` } });
+        const response = await props.api.post(
+            `/company/${id}/review`,
+            { starRating: starPickerRating, reviewText: text },
+            { headers: { Authorization: `Bearer ${props.authInfo.access_token}` } }
+        );
         // Load updated company information
-        loadCompany();
+        loadReviews();
 
         // Close dialog
         handleCloseReviewDialog();
@@ -99,9 +116,13 @@ export default function Company(props) {
 
         // TODO: add user id
         // TODO: handle errors/success
-        const response = await props.api.post(`/company/${id}/question`, { questionText: text }, { headers: { "Authorization": `Bearer ${props.authInfo.access_token}` } });
+        const response = await props.api.post(
+            `/company/${id}/question`,
+            { questionText: text },
+            { headers: { Authorization: `Bearer ${props.authInfo.access_token}` } }
+        );
         // Load updated company information
-        loadCompany();
+        loadQuestions();
 
         // Close dialog
         handleCloseQuestionDialog();
@@ -110,6 +131,8 @@ export default function Company(props) {
     // Load company when component loads
     useEffect(() => {
         loadCompany();
+        loadReviews();
+        loadQuestions();
     }, []);
 
     // "Write review" dialog
@@ -118,27 +141,11 @@ export default function Company(props) {
             <DialogTitle>Skrifa umsögn</DialogTitle>
             <DialogContent>
                 <form id="review_form" onSubmit={submitReview}>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="review_text"
-                        name="text"
-                        label="Umsögn"
-                        type="text"
-                        fullWidth
-                        multiline
-                    />
-                    <StarPicker
-                        rating={starPickerRating}
-                        setRating={setStarPickerRating}
-                    />
+                    <TextField autoFocus margin="dense" id="review_text" name="text" label="Umsögn" type="text" fullWidth multiline />
+                    <StarPicker rating={starPickerRating} setRating={setStarPickerRating} />
                     <DialogActions>
-                        <Button onClick={handleCloseReviewDialog}>
-                            Hætta við
-                        </Button>
-                        <Button type="submit">
-                            Senda
-                        </Button>
+                        <Button onClick={handleCloseReviewDialog}>Hætta við</Button>
+                        <Button type="submit">Senda</Button>
                     </DialogActions>
                 </form>
             </DialogContent>
@@ -151,23 +158,10 @@ export default function Company(props) {
             <DialogTitle>Spyrja spurningar</DialogTitle>
             <DialogContent>
                 <form id="question_form" onSubmit={submitQuestion}>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="question_text"
-                        name="text"
-                        label="Spurning"
-                        type="text"
-                        fullWidth
-                        multiline
-                    />
+                    <TextField autoFocus margin="dense" id="question_text" name="text" label="Spurning" type="text" fullWidth multiline />
                     <DialogActions>
-                        <Button onClick={handleCloseQuestionDialog}>
-                            Hætta við
-                        </Button>
-                        <Button type="submit">
-                            Senda
-                        </Button>
+                        <Button onClick={handleCloseQuestionDialog}>Hætta við</Button>
+                        <Button type="submit">Senda</Button>
                     </DialogActions>
                 </form>
             </DialogContent>
@@ -179,143 +173,103 @@ export default function Company(props) {
             {reviewDialog}
             {questionDialog}
             <Container maxWidth="lg" sx={{ pt: 3, pb: 3 }}>
-                {company
-                    ? (
-                        <>
-                            <Typography variant="h2" mb={1}>
-                                {company.name}
-                            </Typography>
-                            <Stack direction="row" spacing={1} mb={1}>
-                                <Chip
-                                    icon={<WebIcon />}
-                                    label="Vefur"
-                                    component="a"
-                                    href={company.website}
-                                    target="_blank"
-                                    clickable
-                                />
-                                <Chip
-                                    icon={<PhoneIcon />}
-                                    label={company.phoneNumber}
-                                    component="a"
-                                    href={`tel:${company.phoneNumber}`}
-                                    clickable
-                                    // TODO: add aria-label or similar
-                                />
-                                <Chip
-                                    icon={<ScheduleIcon />}
-                                    label={company.openingHours}
-                                />
-                                <Chip
-                                    icon={<BusinessIcon />}
-                                    label={company.address}
-                                    component="a"
-                                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURI(company.address)}`}
-                                    target="_blank"
-                                    clickable
-                                    // TODO: add aria-label or similar
-                                />
-                            </Stack>
-                            <StarRating rating={company.starRating} />
-                            <Typography variant="body1" mt={1}>
-                                {company.description}
-                            </Typography>
-                            <Typography variant="h3" mt={4} mb={1}>
-                                Umsagnir
-                            </Typography>
-                            {company.reviews && company.reviews.length !== 0
-                                ? (
-                                    <Grid container spacing={2} mb={1}>
-                                        {company.reviews.map(review => (
-                                            <Grid item xs={12} sm={6} md={3} key={review.id}>
-                                                <Card>
-                                                    <CardContent>
-                                                        <Typography gutterBottom variant="h5" component="div">
-                                                            Notandanafn
-                                                        </Typography>
-                                                        <StarRating rating={review.starRating} />
-                                                        <Typography variant="body2" mt={1}>
-                                                            {review.reviewText}
-                                                        </Typography>
-                                                    </CardContent>
-                                                </Card>
-                                            </Grid>
-                                        ))}
-                                    </Grid>
-                                )
-                                : (
-                                    <Typography variant="body1">
-                                        Engar umsagnir hafa verið skrifaðar um þetta fyrirtæki.
-                                    </Typography>
-                                )
-                            }
-                            <Button
-                                variant="contained"
-                                onClick={() => setReviewDialogOpen(true)}
-                                disabled={props.authInfo === null}
-                            >
-                                Skrifa umsögn
-                            </Button>
-                            <Typography variant="h3" mt={4} mb={1}>
-                                Spurningar
-                            </Typography>
-                            {company.questions && company.questions.length !== 0
-                                ? (
-                                    <Grid container spacing={2} mb={1}>
-                                        {company.questions.map(question => (
-                                            <Grid item xs={12} sm={6} md={3} key={question.id}>
-                                                <Card>
-                                                    <CardContent>
-                                                        <Typography gutterBottom variant="h5" component="div">
-                                                            {/* {question.username} */}
-                                                        </Typography>
-                                                        <Typography variant="body2">
-                                                            {question.questionText}
-                                                        </Typography>
-                                                        <Typography variant="h5" component="div" mt={2}>
-                                                            Svar
-                                                        </Typography>
-                                                        {question.answerString
-                                                            ? (
-                                                                <Typography variant="body2">
-                                                                    {question.answerString}
-                                                                </Typography>
-                                                            )
-                                                            : (
-                                                                <Typography variant="body2" color="text.secondary">
-                                                                    Þessari spurningu hefur ekki verið svarað.
-                                                                </Typography>
-                                                            )
-                                                        }
-                                                    </CardContent>
-                                                </Card>
-                                            </Grid>
-                                        ))}
-                                    </Grid>
-                                )
-                                : (
-                                    <Typography variant="body1">
-                                        Engar spurningar hafa borist þessu fyrirtæki.
-                                    </Typography>
-                                )
-                            }
-                            <Button
-                                variant="contained"
-                                onClick={() => setQuestionDialogOpen(true)}
-                                disabled={props.authInfo === null}
-                            >
-                                Spyrja spurningar
-                            </Button>
-                        </>
-                    )
-                    : (
-                        <Typography
-                            variant="body1"
-                        >
-                            <CircularProgress />
+                {company ? (
+                    <>
+                        <Typography variant="h2" mb={1}>
+                            {company.name}
                         </Typography>
-                    )
-                }
+                        <Stack direction="row" spacing={1} mb={1}>
+                            <Chip icon={<WebIcon />} label="Vefur" component="a" href={company.website} target="_blank" clickable />
+                            <Chip
+                                icon={<PhoneIcon />}
+                                label={company.phoneNumber}
+                                component="a"
+                                href={`tel:${company.phoneNumber}`}
+                                clickable
+                                // TODO: add aria-label or similar
+                            />
+                            <Chip icon={<ScheduleIcon />} label={company.openingHours} />
+                            <Chip
+                                icon={<BusinessIcon />}
+                                label={company.address}
+                                component="a"
+                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURI(company.address)}`}
+                                target="_blank"
+                                clickable
+                                // TODO: add aria-label or similar
+                            />
+                        </Stack>
+                        <StarRating rating={company.starRating} />
+                        <Typography variant="body1" mt={1}>
+                            {company.description}
+                        </Typography>
+                        <Typography variant="h3" mt={4} mb={1}>
+                            Umsagnir
+                        </Typography>
+                        {reviews && reviews.length !== 0 ? (
+                            <Grid container spacing={2} mb={1}>
+                                {reviews.map((review) => (
+                                    <Grid item xs={12} sm={6} md={3} key={review.id}>
+                                        <Card>
+                                            <CardContent>
+                                                <Typography gutterBottom variant="h5" component="div">
+                                                    {review.username}
+                                                </Typography>
+                                                <StarRating rating={review.starRating} />
+                                                <Typography variant="body2" mt={1}>
+                                                    {review.reviewText}
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        ) : (
+                            <Typography variant="body1">Engar umsagnir hafa verið skrifaðar um þetta fyrirtæki.</Typography>
+                        )}
+                        <Button variant="contained" onClick={() => setReviewDialogOpen(true)} disabled={props.authInfo === null}>
+                            Skrifa umsögn
+                        </Button>
+                        <Typography variant="h3" mt={4} mb={1}>
+                            Spurningar
+                        </Typography>
+                        {questions && questions.length !== 0 ? (
+                            <Grid container spacing={2} mb={1}>
+                                {questions.map((question) => (
+                                    <Grid item xs={12} sm={6} md={3} key={question.id}>
+                                        <Card>
+                                            <CardContent>
+                                                <Typography gutterBottom variant="h5" component="div">
+                                                    {question.username}
+                                                </Typography>
+                                                <Typography variant="body2">{question.questionText}</Typography>
+                                                <Typography variant="h5" component="div" mt={2}>
+                                                    Svar
+                                                </Typography>
+                                                {question.answerString ? (
+                                                    <Typography variant="body2">{question.answerString}</Typography>
+                                                ) : (
+                                                    <Typography variant="body2" color="text.secondary">
+                                                        Þessari spurningu hefur ekki verið svarað.
+                                                    </Typography>
+                                                )}
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        ) : (
+                            <Typography variant="body1">Engar spurningar hafa borist þessu fyrirtæki.</Typography>
+                        )}
+                        <Button variant="contained" onClick={() => setQuestionDialogOpen(true)} disabled={props.authInfo === null}>
+                            Spyrja spurningar
+                        </Button>
+                    </>
+                ) : (
+                    <Typography variant="body1">
+                        <CircularProgress />
+                    </Typography>
+                )}
             </Container>
         </>
     );
