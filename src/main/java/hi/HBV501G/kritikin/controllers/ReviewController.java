@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hi.HBV501G.kritikin.persistence.entites.Review;
+import hi.HBV501G.kritikin.persistence.entites.DTOs.ReviewJSON;
 import hi.HBV501G.kritikin.services.ReviewService;
 
 @RestController
@@ -53,7 +54,7 @@ public class ReviewController {
      * @return a list of all reviews for a particular company
      */
     @GetMapping(value = CompanyController.APIURL + "/company/{id}/reviews")
-    public List<Review> fetchReviewsByCompany(@PathVariable long id) {
+    public List<ReviewJSON> fetchReviewsByCompany(@PathVariable long id) {
         return reviewService.findByCompany(id);
     }
 
@@ -65,7 +66,7 @@ public class ReviewController {
      * @return a list of all reviews for a particular user
      */
     @GetMapping(value = CompanyController.APIURL + "/user/{id}/reviews")
-    public List<Review> fetchReviewsByUser(@PathVariable long id) {
+    public List<ReviewJSON> fetchReviewsByUser(@PathVariable long id) {
         return reviewService.findByUser(id);
     }
 
@@ -83,7 +84,8 @@ public class ReviewController {
      * @return the review that was inserted
      */
     @PostMapping(value = CompanyController.APIURL + "/company/{id}/review")
-    public Review addReview(@RequestBody Review review, @PathVariable("id") long companyId, @RequestHeader("Authorization") String auth) {
+    public Review addReview(@RequestBody Review review, @PathVariable("id") long companyId,
+            @RequestHeader("Authorization") String auth) {
         logger.info("addQuestion() called with authorization header: " + auth);
         String token = auth.replace("Bearer ", "").split("\\.")[1];
         String decodedPayload = new String(Base64.getDecoder().decode(token));

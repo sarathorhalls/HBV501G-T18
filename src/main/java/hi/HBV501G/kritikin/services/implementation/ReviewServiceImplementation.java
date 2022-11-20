@@ -10,10 +10,12 @@ package hi.HBV501G.kritikin.services.implementation;
 
 import java.util.List;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hi.HBV501G.kritikin.persistence.entites.Review;
+import hi.HBV501G.kritikin.persistence.entites.DTOs.ReviewJSON;
 import hi.HBV501G.kritikin.persistence.repositories.ReviewRepository;
 import hi.HBV501G.kritikin.services.CompanyService;
 import hi.HBV501G.kritikin.services.ReviewService;
@@ -21,6 +23,8 @@ import hi.HBV501G.kritikin.services.UserService;
 
 @Service
 public class ReviewServiceImplementation implements ReviewService {
+
+    Logger logger = org.slf4j.LoggerFactory.getLogger(ReviewServiceImplementation.class);
 
     ReviewRepository reviewRepository;
     CompanyService companyService;
@@ -90,8 +94,8 @@ public class ReviewServiceImplementation implements ReviewService {
      * @return a list of all reviews with the given company id.
      */
     @Override
-    public List<Review> findByCompany(long companyId) {
-        return reviewRepository.findByCompanyId(companyId);
+    public List<ReviewJSON> findByCompany(long companyId) {
+        return ReviewJSON.convert(reviewRepository.findByCompanyId(companyId));
     }
 
     /**
@@ -101,8 +105,8 @@ public class ReviewServiceImplementation implements ReviewService {
      * @return a list of all reviews with the given user id.
      */
     @Override
-    public List<Review> findByUser(long userId) {
-        return reviewRepository.findByUserId(userId);
+    public List<ReviewJSON> findByUser(long userId) {
+        return ReviewJSON.convert(reviewRepository.findByUserId(userId));
     }
 
     /**
@@ -115,15 +119,20 @@ public class ReviewServiceImplementation implements ReviewService {
      */
     @Override
     public Review addReview(Review review, long userId, long companyId) {
+        logger.info("Adding review to database");
         if (review == null) {
+            logger.error("Review is null");
             return null;
         }
         if (review.getCompany() == null) {
+            logger.info("Adding company nr: {} to review", companyId);
             review.setCompany(companyService.getReferenceById(companyId));
         }
         if (review.getUser() == null) {
+            logger.info("Adding user nr: {} to review", userId);
             review.setUser(userService.getReferenceById(userId));
         }
+        logger.info("Saving review to database");
         reviewRepository.save(review);
         return review;
     }
