@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import Axios from "axios";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route, BrowserRouter, Link } from "react-router-dom";
 import { Root, Company } from "./routes";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppBar from "@mui/material/AppBar";
@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
+import MUILink from "@mui/material/Link";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -150,13 +150,14 @@ export default function App() {
                     noWrap
                     sx={{ flexGrow: 1 }}
                 >
-                    <Link
-                        href="/"
+                    <MUILink
                         color="inherit"
                         underline="none"
+                        component={Link}
+                        to="/"
                     >
                         Krítíkin
-                    </Link>
+                    </MUILink>
                 </Typography>
                 <TextField
                     id="search"
@@ -274,8 +275,8 @@ export default function App() {
             <CssBaseline />
             { loginDialog }
             { signupDialog }
-            { appToolbar }
             <BrowserRouter>
+                { appToolbar }
                 <Routes>
                     <Route path="/" element={<Root />} />
                     <Route path="/company/:id" element={<Company api={api} authInfo={authInfo} />} />
