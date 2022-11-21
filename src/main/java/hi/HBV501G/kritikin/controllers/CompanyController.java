@@ -68,6 +68,11 @@ public class CompanyController {
         return ResponseEntity.ok().body(companyService.findById(id));
     }
 
+    @GetMapping(value = APIURL + "/findCompany/{name}")
+    public ResponseEntity<Company> findCompany(@PathVariable String name) {
+        return ResponseEntity.ok().body(companyService.findByNameIgnoreCase(name));
+    }
+
     /**
      * Deletes a particular company from a delete request to /api/companies/{id}
      * which has the id of the company in the path.
@@ -98,7 +103,7 @@ public class CompanyController {
         if (company == null || company.getName() == null || company.getName().equals("")) {
             return ResponseEntity.badRequest().body(null);
         }
-        if (companyService.findByName(company.getName()) != null) {
+        if (companyService.findByNameIgnoreCase(company.getName()) != null) {
             return new ResponseEntity<>(null, null, HttpStatus.CONFLICT);
         }
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath()

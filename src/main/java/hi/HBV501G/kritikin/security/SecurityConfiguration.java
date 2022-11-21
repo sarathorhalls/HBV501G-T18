@@ -60,7 +60,7 @@ public class SecurityConfiguration {
         http.cors()
                 .and().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.GET, APIURL + "/companies", APIURL + "/company/**",
-                        APIURL + "auth/refreshtoken/**", APIURL + "/auth/signup/**", APIURL + "/users/**")
+                        APIURL + "auth/refreshtoken/**", APIURL + "/auth/signup/**", APIURL + "/users/**", APIURL + "/findCompany/**")
                 .permitAll()
                 .antMatchers(HttpMethod.POST, APIURL + "/auth/signup/**").permitAll()
                 .antMatchers(HttpMethod.POST, APIURL + "/company/**/review/**").authenticated()

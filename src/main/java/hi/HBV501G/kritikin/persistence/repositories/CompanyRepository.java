@@ -13,7 +13,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 
     List<Company> findAll();
 
-    Company findByName(String name);
+    Company findByNameIgnoreCase(String name);
 
     Company findById(long id);
 

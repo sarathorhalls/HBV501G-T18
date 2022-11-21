@@ -79,8 +79,8 @@ public class CompanyServiceImplementation implements CompanyService {
      * @return the company with the given name.
      */
     @Override
-    public Company findByName(String name) {
-        return companyRepository.findByName(name);
+    public Company findByNameIgnoreCase(String name) {
+        return companyRepository.findByNameIgnoreCase(name);
     }
 
     /**
