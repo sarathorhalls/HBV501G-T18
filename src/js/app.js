@@ -350,7 +350,7 @@ export default function App() {
                 { searchResultsDialog }
                 { appToolbar }
                 <Routes>
-                    <Route path="/" element={<Root />} />
+                    <Route path="/" element={<Root search={search} />} />
                     <Route path="/company/:id" element={<Company api={api} authInfo={authInfo} />} />
                 </Routes>
             </BrowserRouter>
