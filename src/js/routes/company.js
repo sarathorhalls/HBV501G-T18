@@ -128,12 +128,12 @@ export default function Company(props) {
         handleCloseQuestionDialog();
     }
 
-    // Load company when component loads
+    // Load company when component loads or props change
     useEffect(() => {
         loadCompany();
         loadReviews();
         loadQuestions();
-    }, []);
+    }, [props]);
 
     // "Write review" dialog
     const reviewDialog = (
