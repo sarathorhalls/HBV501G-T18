@@ -13,6 +13,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 
 import hi.HBV501G.kritikin.persistence.entites.Company;
@@ -79,8 +80,14 @@ public class CompanyServiceImplementation implements CompanyService {
      * @return the company with the given name.
      */
     @Override
-    public Company findByNameIgnoreCase(String name) {
-        return companyRepository.findByNameIgnoreCase(name);
+    public boolean existsByName(String name) {
+        Streamable<Company> companies = companyRepository.findByNameIgnoreCaseContains(name);
+        return !companies.isEmpty();
+    }
+
+    @Override
+    public List<Company> findMultipleByName(String name) {
+        return companyRepository.findByNameIgnoreCaseContains(name).toList();
     }
 
     /**

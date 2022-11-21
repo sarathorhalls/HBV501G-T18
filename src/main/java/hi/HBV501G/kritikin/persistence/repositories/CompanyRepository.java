@@ -3,6 +3,7 @@ package hi.HBV501G.kritikin.persistence.repositories;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.util.Streamable;
 
 import hi.HBV501G.kritikin.persistence.entites.Company;
 
@@ -13,7 +14,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 
     List<Company> findAll();
 
-    Company findByNameIgnoreCase(String name);
+    Streamable<Company> findByNameIgnoreCaseContains(String name);
 
     Company findById(long id);
 

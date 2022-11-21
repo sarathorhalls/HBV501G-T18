@@ -69,8 +69,8 @@ public class CompanyController {
     }
 
     @GetMapping(value = APIURL + "/findCompany/{name}")
-    public ResponseEntity<Company> findCompany(@PathVariable String name) {
-        return ResponseEntity.ok().body(companyService.findByNameIgnoreCase(name));
+    public ResponseEntity<List<Company>> findCompany(@PathVariable String name) {
+        return ResponseEntity.ok().body(companyService.findMultipleByName(name));
     }
 
     /**
@@ -103,7 +103,7 @@ public class CompanyController {
         if (company == null || company.getName() == null || company.getName().equals("")) {
             return ResponseEntity.badRequest().body(null);
         }
-        if (companyService.findByNameIgnoreCase(company.getName()) != null) {
+        if (companyService.existsByName(company.getName())) {
             return new ResponseEntity<>(null, null, HttpStatus.CONFLICT);
         }
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath()

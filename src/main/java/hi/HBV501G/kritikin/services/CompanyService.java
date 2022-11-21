@@ -11,7 +11,9 @@ public interface CompanyService {
 
     public Company findById(long id);
 
-    public Company findByNameIgnoreCase(String name);
+    public boolean existsByName(String name);
+
+    public List<Company> findMultipleByName(String name);
 
     public List<Company> findAll();
 
