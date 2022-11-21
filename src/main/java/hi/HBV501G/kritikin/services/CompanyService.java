@@ -11,7 +11,7 @@ public interface CompanyService {
 
     public Company findById(long id);
 
-    public Company findByName(String name);
+    public Company findByNameIgnoreCase(String name);
 
     public List<Company> findAll();
 
