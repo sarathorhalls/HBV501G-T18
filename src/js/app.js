@@ -18,7 +18,7 @@ import DialogActions from "@mui/material/DialogActions";
 import jwt_decode from "jwt-decode";
 
 const api = Axios.create({
-    baseURL: "http://localhost:8338/api",
+    baseURL: document.location.origin + ":8080/api",
 });
 
 export default function App() {
@@ -79,7 +79,7 @@ export default function App() {
     async function logIn(event) {
         // Prevent GET submission + reload
         event.preventDefault();
-        
+
         // Get data
         const form = event.target;
         const username = form.username.value;
@@ -89,7 +89,7 @@ export default function App() {
         const params = new URLSearchParams();
         params.append("username", username);
         params.append("password", password);
-        
+
         let response;
         try {
             response = await api.post("/auth/signin", params);
@@ -109,7 +109,7 @@ export default function App() {
 
         // Store token in localStorage
         localStorage.setItem("access_token", response.data.access_token);
-        
+
         // Close dialog
         handleCloseLoginDialog();
     }
@@ -118,12 +118,12 @@ export default function App() {
     async function signUp(event) {
         // Prevent GET submission + reload
         event.preventDefault();
-        
+
         // Get data
         const form = event.target;
         const username = form.username.value;
         const password = form.password.value;
-        
+
         let response;
         try {
             response = await api.post(`/auth/signup`, { username, password });
@@ -137,7 +137,7 @@ export default function App() {
             }
             return;
         }
-        
+
         // Close dialog
         handleCloseSignupDialog();
     }
@@ -175,11 +175,11 @@ export default function App() {
                                 color="inherit"
                                 onClick={logOut}
                             >
-                                Skrá út {authInfo.username}
-                            </Button>
+                            Skrá út {authInfo.username}
+                        </Button>
                         )
                         : (
-                            <>
+                        <>
                                 <Button
                                     variant="text"
                                     color="inherit"
@@ -190,7 +190,7 @@ export default function App() {
                                     color="inherit"
                                     onClick={() => setSignupDialogOpen(true)}
                                 >Stofna reikning</Button>
-                            </>
+                        </>
                         )
                     }
                 </Box>
@@ -233,7 +233,7 @@ export default function App() {
             </DialogContent>
         </Dialog>
     );
-    
+
     const signupDialog = (
         <Dialog open={signupDialogOpen} onClose={handleCloseSignupDialog}>
             <DialogTitle>Nýskrá</DialogTitle>
