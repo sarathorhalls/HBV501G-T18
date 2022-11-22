@@ -43,7 +43,7 @@ import hi.HBV501G.kritikin.persistence.entites.User;
 import hi.HBV501G.kritikin.services.UserService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin()
 public class AuthenticationController {
     private UserService userService;
 

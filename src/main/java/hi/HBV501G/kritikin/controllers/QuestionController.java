@@ -26,7 +26,7 @@ import hi.HBV501G.kritikin.persistence.entites.DTOs.QuestionJSON;
 import hi.HBV501G.kritikin.services.QuestionService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin()
 public class QuestionController {
 
     private QuestionService questionService;

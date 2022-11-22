@@ -27,7 +27,7 @@ import hi.HBV501G.kritikin.persistence.entites.Company;
 import hi.HBV501G.kritikin.services.CompanyService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin()
 public class CompanyController {
 
     public static final String APIURL = "/api";

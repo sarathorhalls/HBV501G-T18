@@ -10,7 +10,6 @@ import java.util.Base64;
  */
 
 import java.util.List;
-import java.util.regex.Matcher;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hi.HBV501G.kritikin.persistence.entites.Review;
@@ -28,7 +26,7 @@ import hi.HBV501G.kritikin.persistence.entites.DTOs.ReviewJSON;
 import hi.HBV501G.kritikin.services.ReviewService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin()
 public class ReviewController {
 
     private ReviewService reviewService;
