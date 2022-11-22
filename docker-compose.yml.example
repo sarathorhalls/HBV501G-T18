@@ -17,7 +17,7 @@ services:
         depends_on:
             - postgres
         ports:
-            - 8338:8080
+            - 8080:8080
     web:
         build:
             context: .
@@ -25,4 +25,4 @@ services:
         depends_on:
             - server
         ports:
-            - 8080:80
+            - 80:80
