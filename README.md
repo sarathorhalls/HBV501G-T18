@@ -16,4 +16,4 @@ If there is a target folder in the root directory remove it (Maven sometimes lik
 docker-compose up --build
 ```
 
-Open <http://localhost:8080/> in a web browser.
+Open <http://localhost/> in a web browser.
