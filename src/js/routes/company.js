@@ -50,25 +50,49 @@ export default function Company(props) {
      * Loads the company with the current specified ID and sets the state
      */
     async function loadCompany() {
-        const response = await props.api.get(`/company/${id}`);
+        let response;
+        try {
+            response = await props.api.get(`/company/${id}`);
+        } catch (e) {
+            window.alert("Villa: Gat ekki hlaðið upplýsingum um fyrirtæki");
+            return;
+        }
+        // Parse opening hours
         response.data.openingHours = response.data.openingHours.split(",");
         if (response.data.openingHours.length === 7) {
             response.data.openingHours = response.data.openingHours[new Date().getDay()]
         } else {
             response.data.openingHours = response.data.openingHours[0]
         }
+        // Set company state
         setCompany(response.data);
-        // TODO: throw error if nothing found
     }
 
+    /**
+     * Loads the reviews for the current company
+     */
     async function loadReviews() {
-        const response = await props.api.get(`/company/${id}/reviews`);
+        let response;
+        try {
+            response = await props.api.get(`/company/${id}/reviews`);
+        } catch (e) {
+            window.alert("Villa: Gat ekki hlaðið umsögnum um fyrirtæki");
+            return;
+        }
         setReviews(response.data);
-        console.log("running loadReviews");
     }
 
+    /**
+     * Loads the questions for the current company
+     */
     async function loadQuestions() {
-        const response = await props.api.get(`/company/${id}/questions`);
+        let response;
+        try {
+            response = await props.api.get(`/company/${id}/questions`);
+        } catch (e) {
+            window.alert("Villa: Gat ekki hlaðið spurningum til fyrirtækis");
+            return;
+        }
         setQuestions(response.data);
     }
 
@@ -100,12 +124,17 @@ export default function Company(props) {
         const form = event.target;
         const text = form.text.value;
 
-        // TODO: handle errors/success
-        const response = await props.api.post(
-            `/company/${id}/review`,
-            { starRating: starPickerRating, reviewText: text },
-            { headers: { Authorization: `Bearer ${props.authInfo.access_token}` } }
-        );
+        let response;
+        try {
+            response = await props.api.post(
+                `/company/${id}/review`,
+                { starRating: starPickerRating, reviewText: text },
+                { headers: { Authorization: `Bearer ${props.authInfo.access_token}` } }
+            );
+        } catch (e) {
+            window.alert("Villa: Tókst ekki að senda umsögn");
+            return;
+        }
         // Load updated company information
         loadReviews();
         loadCompany();
@@ -126,12 +155,17 @@ export default function Company(props) {
         const form = event.target;
         const text = form.text.value;
 
-        // TODO: handle errors/success
-        const response = await props.api.post(
-            `/company/${id}/question`,
-            { questionText: text },
-            { headers: { Authorization: `Bearer ${props.authInfo.access_token}` } }
-        );
+        let response;
+        try {
+            response = await props.api.post(
+                `/company/${id}/question`,
+                { questionText: text },
+                { headers: { Authorization: `Bearer ${props.authInfo.access_token}` } }
+            );
+        } catch (e) {
+            window.alert("Villa: Tókst ekki að senda spurningu");
+            return;
+        }
         // Load updated company information
         loadQuestions();
 

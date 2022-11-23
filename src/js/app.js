@@ -70,7 +70,13 @@ export default function App() {
         const query = form["search-query"].value;
 
         // Submit query
-        const response = await api.get(`/findCompany/${query}`);
+        let response;
+        try {
+            response = await api.get(`/findCompany/${query}`);
+        } catch (e) {
+            window.alert("Villa: Gat ekki leitað");
+            return;
+        }
 
         // Set results state
         setSearchResults(response.data);
