@@ -116,7 +116,7 @@ public class AuthenticationController {
         return user;
     }
 
-    @PostMapping(value = CompanyController.APIURL + "/companyUser/{id}")
+    @PostMapping(value = CompanyController.APIURL + "/companyUser/{companyId}")
     public ResponseEntity<String> redeemAccess(@PathVariable long companyId, @RequestHeader("Authorization") String auth) {
         logger.info("redeemAccess() called with authorization header: {}", auth);
         String token = auth.replace("Bearer ", "").split("\\.")[1];
