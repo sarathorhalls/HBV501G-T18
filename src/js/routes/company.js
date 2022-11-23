@@ -50,25 +50,49 @@ export default function Company(props) {
      * Loads the company with the current specified ID and sets the state
      */
     async function loadCompany() {
-        const response = await props.api.get(`/company/${id}`);
+        let response;
+        try {
+            response = await props.api.get(`/company/${id}`);
+        } catch (e) {
+            window.alert("Villa: Gat ekki hlaðið upplýsingum um fyrirtæki");
+            return;
+        }
+        // Parse opening hours
         response.data.openingHours = response.data.openingHours.split(",");
         if (response.data.openingHours.length === 7) {
             response.data.openingHours = response.data.openingHours[new Date().getDay()]
         } else {
             response.data.openingHours = response.data.openingHours[0]
         }
+        // Set company state
         setCompany(response.data);
-        // TODO: throw error if nothing found
     }
 
+    /**
+     * Loads the reviews for the current company
+     */
     async function loadReviews() {
-        const response = await props.api.get(`/company/${id}/reviews`);
+        let response;
+        try {
+            response = await props.api.get(`/company/${id}/reviews`);
+        } catch (e) {
+            window.alert("Villa: Gat ekki hlaðið umsögnum um fyrirtæki");
+            return;
+        }
         setReviews(response.data);
-        console.log("running loadReviews");
     }
 
+    /**
+     * Loads the questions for the current company
+     */
     async function loadQuestions() {
-        const response = await props.api.get(`/company/${id}/questions`);
+        let response;
+        try {
+            response = await props.api.get(`/company/${id}/questions`);
+        } catch (e) {
+            window.alert("Villa: Gat ekki hlaðið spurningum til fyrirtækis");
+            return;
+        }
         setQuestions(response.data);
     }
 
@@ -88,7 +112,10 @@ export default function Company(props) {
         setQuestionDialogOpen(false);
     }
 
-    // TODO: add jsdoc here because I don't understand how I'm supposed to type hint the event object
+    /**
+     * Submits a review from the currently logged in user
+     * @param {*} event Form submission event object, fired by a form containing the review text
+     */
     async function submitReview(event) {
         // Prevent GET submission + reload
         event.preventDefault();
@@ -97,13 +124,17 @@ export default function Company(props) {
         const form = event.target;
         const text = form.text.value;
 
-        // TODO: add user id
-        // TODO: handle errors/success
-        const response = await props.api.post(
-            `/company/${id}/review`,
-            { starRating: starPickerRating, reviewText: text },
-            { headers: { Authorization: `Bearer ${props.authInfo.access_token}` } }
-        );
+        let response;
+        try {
+            response = await props.api.post(
+                `/company/${id}/review`,
+                { starRating: starPickerRating, reviewText: text },
+                { headers: { Authorization: `Bearer ${props.authInfo.access_token}` } }
+            );
+        } catch (e) {
+            window.alert("Villa: Tókst ekki að senda umsögn");
+            return;
+        }
         // Load updated company information
         loadReviews();
         loadCompany();
@@ -112,7 +143,10 @@ export default function Company(props) {
         handleCloseReviewDialog();
     }
 
-    // TODO: add jsdoc
+    /**
+     * Submits a question from the currently logged in user
+     * @param {*} event Form submission event object, fired by a form containing the question text
+     */
     async function submitQuestion(event) {
         // Prevent GET submission + reload
         event.preventDefault();
@@ -121,13 +155,17 @@ export default function Company(props) {
         const form = event.target;
         const text = form.text.value;
 
-        // TODO: add user id
-        // TODO: handle errors/success
-        const response = await props.api.post(
-            `/company/${id}/question`,
-            { questionText: text },
-            { headers: { Authorization: `Bearer ${props.authInfo.access_token}` } }
-        );
+        let response;
+        try {
+            response = await props.api.post(
+                `/company/${id}/question`,
+                { questionText: text },
+                { headers: { Authorization: `Bearer ${props.authInfo.access_token}` } }
+            );
+        } catch (e) {
+            window.alert("Villa: Tókst ekki að senda spurningu");
+            return;
+        }
         // Load updated company information
         loadQuestions();
 
@@ -167,6 +205,7 @@ export default function Company(props) {
             <DialogContent>
                 <form id="review-form" onSubmit={submitReview}>
                     <TextField autoFocus margin="dense" id="review-text" name="text" label="Umsögn" type="text" fullWidth multiline />
+                    <Typography variant="subtitle2">Stjörnur</Typography>
                     <StarPicker rating={starPickerRating} setRating={setStarPickerRating} />
                     <DialogActions>
                         <Button onClick={handleCloseReviewDialog}>Hætta við</Button>
@@ -211,9 +250,9 @@ export default function Company(props) {
                                 component="a"
                                 href={`tel:${company.phoneNumber}`}
                                 clickable
-                                // TODO: add aria-label or similar
+                                aria-label="Símanúmer (hringir ef valið)"
                             />
-                            <Chip icon={<ScheduleIcon />} label={company.openingHours} />
+                            <Chip icon={<ScheduleIcon />} label={company.openingHours} aria-label="Opnunartími" />
                             <Chip
                                 icon={<BusinessIcon />}
                                 label={company.address}
@@ -221,7 +260,7 @@ export default function Company(props) {
                                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURI(company.address)}`}
                                 target="_blank"
                                 clickable
-                                // TODO: add aria-label or similar
+                                aria-label="Heimilisfang (skoðar á Google Maps ef valið)"
                             />
                         </Stack>
                         <StarRating rating={company.starRating} />
@@ -298,7 +337,10 @@ export default function Company(props) {
                         </Button>
                     </>
                 ) : (
-                    <Typography variant="body1">
+                    <Typography
+                        variant="body1"
+                        sx={{ textAlign: "center" }}
+                    >
                         <CircularProgress />
                     </Typography>
                 )}
