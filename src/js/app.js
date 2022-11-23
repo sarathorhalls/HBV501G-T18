@@ -57,7 +57,10 @@ export default function App() {
         }
     }, []);
 
-    // TODO: add JSdoc
+    /**
+     * Searches companies for the specified query
+     * @param {*} event Form submission event object, fired by a form containing a search-query input field
+     */
     async function search(event) {
         // Prevent GET submission + reload
         event.preventDefault();
@@ -108,7 +111,10 @@ export default function App() {
         localStorage.removeItem("access_key");
     }
 
-    // TODO: add jsdoc
+    /**
+     * Logs the user in
+     * @param {*} event Form submission event object, fired by a form containing username and password input fields
+     */
     async function logIn(event) {
         // Prevent GET submission + reload
         event.preventDefault();
@@ -147,7 +153,10 @@ export default function App() {
         handleCloseLoginDialog();
     }
 
-    // TODO: add jsdoc
+    /**
+     * Creates an ew user
+     * @param {*} event Form submission event object, fired by a form containing username and password input fields
+     */
     async function signUp(event) {
         // Prevent GET submission + reload
         event.preventDefault();
