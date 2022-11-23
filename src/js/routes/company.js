@@ -216,9 +216,9 @@ export default function Company(props) {
                                 component="a"
                                 href={`tel:${company.phoneNumber}`}
                                 clickable
-                                // TODO: add aria-label or similar
+                                aria-label="Símanúmer (hringir ef valið)"
                             />
-                            <Chip icon={<ScheduleIcon />} label={company.openingHours} />
+                            <Chip icon={<ScheduleIcon />} label={company.openingHours} aria-label="Opnunartími" />
                             <Chip
                                 icon={<BusinessIcon />}
                                 label={company.address}
@@ -226,7 +226,7 @@ export default function Company(props) {
                                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURI(company.address)}`}
                                 target="_blank"
                                 clickable
-                                // TODO: add aria-label or similar
+                                aria-label="Heimilisfang (skoðar á Google Maps ef valið)"
                             />
                         </Stack>
                         <StarRating rating={company.starRating} />
