@@ -84,7 +84,7 @@ public class ReviewController {
     @PostMapping(value = CompanyController.APIURL + "/company/{id}/review")
     public Review addReview(@RequestBody Review review, @PathVariable("id") long companyId,
             @RequestHeader("Authorization") String auth) {
-        logger.info("addReview() called with authorization header: " + auth);
+        logger.info("addReview() called with authorization header: {}", auth);
         String token = auth.replace("Bearer ", "").split("\\.")[1];
         String decodedPayload = new String(Base64.getDecoder().decode(token));
         try {
@@ -92,7 +92,7 @@ public class ReviewController {
             logger.info("User id: " + userId);
             return reviewService.addReview(review, userId, companyId);
         } catch (Exception e) {
-            logger.error("Error parsing user id from token: " + e.getMessage());
+            logger.error("Error parsing user id from token: {}", e.getMessage());
             return null;
         }
 
