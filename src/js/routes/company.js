@@ -303,7 +303,10 @@ export default function Company(props) {
                         </Button>
                     </>
                 ) : (
-                    <Typography variant="body1">
+                    <Typography
+                        variant="body1"
+                        sx={{ textAlign: "center" }}
+                    >
                         <CircularProgress />
                     </Typography>
                 )}
