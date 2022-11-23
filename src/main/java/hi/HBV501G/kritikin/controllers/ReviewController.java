@@ -89,7 +89,7 @@ public class ReviewController {
         String decodedPayload = new String(Base64.getDecoder().decode(token));
         try {
             Long userId = Long.parseLong(decodedPayload.split(",")[1].split(":")[1].split("\"")[1]);
-            logger.info("User id: " + userId);
+            logger.info("User id: {}", userId);
             return reviewService.addReview(review, userId, companyId);
         } catch (Exception e) {
             logger.error("Error parsing user id from token: {}", e.getMessage());
