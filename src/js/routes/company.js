@@ -88,7 +88,10 @@ export default function Company(props) {
         setQuestionDialogOpen(false);
     }
 
-    // TODO: add jsdoc here because I don't understand how I'm supposed to type hint the event object
+    /**
+     * Submits a review from the currently logged in user
+     * @param {*} event Form submission event object, fired by a form containing the review text
+     */
     async function submitReview(event) {
         // Prevent GET submission + reload
         event.preventDefault();
@@ -97,7 +100,6 @@ export default function Company(props) {
         const form = event.target;
         const text = form.text.value;
 
-        // TODO: add user id
         // TODO: handle errors/success
         const response = await props.api.post(
             `/company/${id}/review`,
@@ -112,7 +114,10 @@ export default function Company(props) {
         handleCloseReviewDialog();
     }
 
-    // TODO: add jsdoc
+    /**
+     * Submits a question from the currently logged in user
+     * @param {*} event Form submission event object, fired by a form containing the question text
+     */
     async function submitQuestion(event) {
         // Prevent GET submission + reload
         event.preventDefault();
@@ -121,7 +126,6 @@ export default function Company(props) {
         const form = event.target;
         const text = form.text.value;
 
-        // TODO: add user id
         // TODO: handle errors/success
         const response = await props.api.post(
             `/company/${id}/question`,
