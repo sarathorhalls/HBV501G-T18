@@ -39,6 +39,8 @@ public class CompanyServiceImplementation implements CompanyService {
 
         // this.save(new Company("Test", 5.0, "www.test.com", 1234567, "Test description", "Test address", "Test opening hours"));
         // this.save(new Company("Test2", 4.0, "www.test2.com", 1234567, "Test2 description", "Test2 address", "Test2 opening hours"));
+        // this.save(new Company("Sportís", 5.0, "www.sportis.is", 5201000, "Sportís er rótgróið fyrirtæki á sviði íþrótta á Íslandi. Við höfum verið til starfa frá árinu 1983 og vöndum vel valið á merkjum sem við bjóðum uppá.", "Skeifan 11", "Sunnudagur: ekki opið, Mánudagur: 10-18, Þriðjudagur: 10-18, Miðvikudagur: 10-18, Fimmtudagur: 10-18, Föstudagur: 10-18, Laugardagur: 11-16"));
+        // this.save(new Company("Sports Direct", 5.0, "www.sportsdirect.com", 5713000, "Við höfum aldrei verið hrædd við að stefna fram á við og breyta iðnaðinum, auka fjölbreytni okkar og reisa verslanir.", "Skogarlind 2, 201 Kópavogur", "Sunnudagur: 11-19, Mánudagur: 10:30-19, Þriðjudagur: 10:30-19, Miðvikudagur: 10:30-19, Fimmtudagur: 10:30-19, Föstudagur: 10:30-19, Laugardagur: 10-19"));
 
     }
 
