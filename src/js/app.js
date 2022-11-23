@@ -241,7 +241,7 @@ export default function App() {
         <Dialog open={loginDialogOpen} onClose={handleCloseLoginDialog}>
             <DialogTitle>Skrá inn</DialogTitle>
             <DialogContent>
-                <form id="question_form" onSubmit={logIn}>
+                <form id="login_form" onSubmit={logIn}>
                     <TextField
                         autoFocus
                         margin="dense"
@@ -277,7 +277,7 @@ export default function App() {
         <Dialog open={signupDialogOpen} onClose={handleCloseSignupDialog}>
             <DialogTitle>Nýskrá</DialogTitle>
             <DialogContent>
-                <form id="question_form" onSubmit={signUp}>
+                <form id="signup_form" onSubmit={signUp}>
                     <TextField
                         autoFocus
                         margin="dense"
