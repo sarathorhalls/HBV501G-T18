@@ -22,7 +22,7 @@ import ListItemText from "@mui/material/ListItemText";
 import jwt_decode from "jwt-decode";
 
 const api = Axios.create({
-    baseURL: document.location.origin + ":8080/api",
+    baseURL: `${window.location.origin}/api`,
 });
 
 export default function App() {
