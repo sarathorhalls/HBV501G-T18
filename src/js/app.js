@@ -15,6 +15,10 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
 import jwt_decode from "jwt-decode";
 
 const api = Axios.create({
@@ -26,6 +30,9 @@ export default function App() {
     // Dialog open variables
     const [loginDialogOpen, setLoginDialogOpen] = useState(false);
     const [signupDialogOpen, setSignupDialogOpen] = useState(false);
+    const [searchResultsDialogOpen, setSearchResultsDialogOpen] = useState(false);
+    // Search results array
+    const [searchResults, setSearchResults] = useState([]);
 
     useEffect(() => {
         // Check if user is logged in on load
@@ -50,6 +57,25 @@ export default function App() {
         }
     }, []);
 
+    // TODO: add JSdoc
+    async function search(event) {
+        // Prevent GET submission + reload
+        event.preventDefault();
+        
+        // Get data
+        const form = event.target;
+        const query = form.search_query.value;
+
+        // Submit query
+        const response = await api.get(`/findCompany/${query}`);
+
+        // Set results state
+        setSearchResults(response.data);
+
+        // Show search results
+        setSearchResultsDialogOpen(true);
+    }
+
     /**
      * Closes the "log in" dialog
      */
@@ -62,6 +88,13 @@ export default function App() {
      */
     function handleCloseSignupDialog() {
         setSignupDialogOpen(false);
+    }
+
+    /**
+     * Closes the search results dialog
+     */
+    function handleCloseSearchResultsDialog() {
+        setSearchResultsDialogOpen(false);
     }
 
     /**
@@ -159,13 +192,19 @@ export default function App() {
                         Krítíkin
                     </MUILink>
                 </Typography>
-                <TextField
-                    id="search"
-                    label="Leita …"
-                    variant="standard"
-                    // TODO: fix color
-                    sx={{ flexGrow: 1 }}
-                />
+                <form
+                    id="search_form"
+                    onSubmit={search}
+                    style={{ flexGrow: 1 }}
+                >
+                    <TextField
+                        id="search_field"
+                        name="search_query"
+                        label="Leita …"
+                        variant="standard"
+                        sx={{ width: "100%" }}
+                    />
+                </form>
                 <Box sx={{ flexGrow: 1 }} />
                 <Box>
                     {authInfo
@@ -202,7 +241,7 @@ export default function App() {
         <Dialog open={loginDialogOpen} onClose={handleCloseLoginDialog}>
             <DialogTitle>Skrá inn</DialogTitle>
             <DialogContent>
-                <form id="question_form" onSubmit={logIn}>
+                <form id="login_form" onSubmit={logIn}>
                     <TextField
                         autoFocus
                         margin="dense"
@@ -238,7 +277,7 @@ export default function App() {
         <Dialog open={signupDialogOpen} onClose={handleCloseSignupDialog}>
             <DialogTitle>Nýskrá</DialogTitle>
             <DialogContent>
-                <form id="question_form" onSubmit={signUp}>
+                <form id="signup_form" onSubmit={signUp}>
                     <TextField
                         autoFocus
                         margin="dense"
@@ -270,15 +309,48 @@ export default function App() {
         </Dialog>
     );
 
+    const searchResultsDialog = (
+        <Dialog open={searchResultsDialogOpen} onClose={handleCloseSearchResultsDialog}>
+            <DialogTitle>Leitarniðurstöður</DialogTitle>
+            <DialogContent>
+                {searchResults.length === 0
+                    ? (
+                        <Typography variant="body1">
+                            Engin fyrirtæki fundust.
+                        </Typography>
+                    )
+                    : (
+                        <nav>
+                            <List>
+                                {searchResults.map(company => (
+                                    <ListItem disablePadding key={company.id}>
+                                        <ListItemButton
+                                            onClick={handleCloseSearchResultsDialog}
+                                            component={Link}
+                                            to={`/company/${company.id}`}
+                                        >
+                                            <ListItemText primary={company.name} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </nav>
+                    )
+                }
+            </DialogContent>
+        </Dialog>
+    );
+
     return (
         <React.StrictMode>
             <CssBaseline />
-            { loginDialog }
-            { signupDialog }
             <BrowserRouter>
+                { loginDialog }
+                { signupDialog }
+                { searchResultsDialog }
                 { appToolbar }
                 <Routes>
-                    <Route path="/" element={<Root />} />
+                    <Route path="/" element={<Root search={search} />} />
                     <Route path="/company/:id" element={<Company api={api} authInfo={authInfo} />} />
                 </Routes>
             </BrowserRouter>

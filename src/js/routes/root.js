@@ -2,19 +2,22 @@ import React from "react";
 import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 
-export default function Root() {
+export default function Root(props) {
     return (
         <Container maxWidth="lg">
-            <TextField
-                id="body-search"
-                label="Leita"
-                variant="filled"
-                onKeyPress={(e) => {
-                    if (e.key === "Enter") {
-                        window.alert(`Searched for ${e.target.value}`);
-                    }
-                }}
-            />
+            <form
+                id="body_search_form"
+                onSubmit={props.search}
+                style={{ textAlign: "center" }}
+            >
+                <TextField
+                    id="body_search_field"
+                    name="search_query"
+                    label="Leita …"
+                    variant="filled"
+                    sx={{ width: "50%" }}
+                />
+            </form>
         </Container>
     );
 }
