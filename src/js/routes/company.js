@@ -100,6 +100,7 @@ export default function Company(props) {
         );
         // Load updated company information
         loadReviews();
+        loadCompany();
 
         // Close dialog
         handleCloseReviewDialog();
