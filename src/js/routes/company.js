@@ -165,8 +165,8 @@ export default function Company(props) {
         <Dialog open={reviewDialogOpen} onClose={handleCloseReviewDialog}>
             <DialogTitle>Skrifa umsögn</DialogTitle>
             <DialogContent>
-                <form id="review_form" onSubmit={submitReview}>
-                    <TextField autoFocus margin="dense" id="review_text" name="text" label="Umsögn" type="text" fullWidth multiline />
+                <form id="review-form" onSubmit={submitReview}>
+                    <TextField autoFocus margin="dense" id="review-text" name="text" label="Umsögn" type="text" fullWidth multiline />
                     <StarPicker rating={starPickerRating} setRating={setStarPickerRating} />
                     <DialogActions>
                         <Button onClick={handleCloseReviewDialog}>Hætta við</Button>
@@ -182,8 +182,8 @@ export default function Company(props) {
         <Dialog open={questionDialogOpen} onClose={handleCloseQuestionDialog}>
             <DialogTitle>Spyrja spurningar</DialogTitle>
             <DialogContent>
-                <form id="question_form" onSubmit={submitQuestion}>
-                    <TextField autoFocus margin="dense" id="question_text" name="text" label="Spurning" type="text" fullWidth multiline />
+                <form id="question-form" onSubmit={submitQuestion}>
+                    <TextField autoFocus margin="dense" id="question-text" name="text" label="Spurning" type="text" fullWidth multiline />
                     <DialogActions>
                         <Button onClick={handleCloseQuestionDialog}>Hætta við</Button>
                         <Button type="submit">Senda</Button>

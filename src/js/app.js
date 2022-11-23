@@ -64,7 +64,7 @@ export default function App() {
         
         // Get data
         const form = event.target;
-        const query = form.search_query.value;
+        const query = form["search-query"].value;
 
         // Submit query
         const response = await api.get(`/findCompany/${query}`);
@@ -193,13 +193,13 @@ export default function App() {
                     </MUILink>
                 </Typography>
                 <form
-                    id="search_form"
+                    id="search-form"
                     onSubmit={search}
                     style={{ flexGrow: 1 }}
                 >
                     <TextField
-                        id="search_field"
-                        name="search_query"
+                        id="search-field"
+                        name="search-query"
                         label="Leita …"
                         variant="standard"
                         sx={{ width: "100%" }}
@@ -241,11 +241,11 @@ export default function App() {
         <Dialog open={loginDialogOpen} onClose={handleCloseLoginDialog}>
             <DialogTitle>Skrá inn</DialogTitle>
             <DialogContent>
-                <form id="login_form" onSubmit={logIn}>
+                <form id="login-form" onSubmit={logIn}>
                     <TextField
                         autoFocus
                         margin="dense"
-                        id="login_username"
+                        id="login-username"
                         name="username"
                         label="Notandanafn"
                         type="text"
@@ -254,7 +254,7 @@ export default function App() {
                     <TextField
                         autoFocus
                         margin="dense"
-                        id="login_password"
+                        id="login-password"
                         name="password"
                         label="Lykilorð"
                         type="password"
@@ -277,11 +277,11 @@ export default function App() {
         <Dialog open={signupDialogOpen} onClose={handleCloseSignupDialog}>
             <DialogTitle>Nýskrá</DialogTitle>
             <DialogContent>
-                <form id="signup_form" onSubmit={signUp}>
+                <form id="signup-form" onSubmit={signUp}>
                     <TextField
                         autoFocus
                         margin="dense"
-                        id="signup_username"
+                        id="signup-username"
                         name="username"
                         label="Notandanafn"
                         type="text"
@@ -290,7 +290,7 @@ export default function App() {
                     <TextField
                         autoFocus
                         margin="dense"
-                        id="signup_password"
+                        id="signup-password"
                         name="password"
                         label="Lykilorð"
                         type="password"
