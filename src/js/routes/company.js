@@ -135,6 +135,24 @@ export default function Company(props) {
         handleCloseQuestionDialog();
     }
 
+    /**
+     * Submit request to redeem company page as user
+     */
+    async function submitRedemptionRequest() {
+        let response;
+        try {
+            response = await props.api.post(
+                `/companyUser/${id}`,
+                undefined,
+                { headers: { Authorization: `Bearer ${props.authInfo.access_token}` } }
+            );
+        } catch (e) {
+            window.alert("Eitthvað fór úrskeiðis, vinsamlegast reyndu aftur síðar");
+            return;
+        }
+        window.alert("Beiðni send");
+    }
+
     // Load company when component loads or props change
     useEffect(() => {
         loadCompany();
@@ -270,6 +288,13 @@ export default function Company(props) {
                         )}
                         <Button variant="contained" onClick={() => setQuestionDialogOpen(true)} disabled={props.authInfo === null}>
                             Spyrja spurningar
+                        </Button>
+                        <Typography variant="h3" mt={4} mb={1}>
+                            Stjórn
+                        </Typography>
+                        <Typography variant="body1">Ef þú ert fulltrúi þessa fyrirtækis getur þú sótt um að stjórna þessari síðu.</Typography>
+                        <Button variant="contained" onClick={submitRedemptionRequest} disabled={props.authInfo === null}>
+                            Sækja um stjórnunaraðgang
                         </Button>
                     </>
                 ) : (
