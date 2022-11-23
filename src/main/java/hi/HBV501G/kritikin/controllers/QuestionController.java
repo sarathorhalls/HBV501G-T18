@@ -86,15 +86,15 @@ public class QuestionController {
     @PostMapping(value = CompanyController.APIURL + "/company/{id}/question")
     public Question addQuestion(@RequestBody Question question,
             @PathVariable("id") long companyId, @RequestHeader("Authorization") String auth) {
-        logger.info("addQuestion() called with authorization header: " + auth);
+        logger.info("addQuestion() called with authorization header: {}", auth);
         String token = auth.replace("Bearer ", "").split("\\.")[1];
         String decodedPayload = new String(Base64.getDecoder().decode(token));
         try {
             Long userId = Long.parseLong(decodedPayload.split(",")[1].split(":")[1].split("\"")[1]);
-            logger.info("User id: " + userId);
+            logger.info("User id: {}", userId);
             return questionService.addQuestion(question, userId, companyId);
         } catch (Exception e) {
-            logger.error("Error parsing user id from token: " + e.getMessage());
+            logger.error("Error parsing user id from token: {}", e.getMessage());
             return null;
         }
     }

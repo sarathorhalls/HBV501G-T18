@@ -48,12 +48,18 @@ public class User {
     }
 
     public User(String username, String password) {
+        if (username == null || password == null) {
+            throw new IllegalArgumentException("Username and password cannot be null");
+        }
         this.username = username;
         this.password = password;
     }
 
     public User(String username, String password, List<Review> reviews, List<Question> questions,
             Collection<Authority> authorities) {
+        if (username == null || password == null) {
+            throw new IllegalArgumentException("Username and password cannot be null");
+        }
         this.username = username;
         this.password = password;
         this.reviews = reviews;
@@ -80,6 +86,9 @@ public class User {
     }
 
     public void setUsername(String username) {
+        if (username == null) {
+            throw new IllegalArgumentException("Username cannot be null");
+        }
         this.username = username;
     }
 
@@ -88,6 +97,9 @@ public class User {
     }
 
     public void setPassword(String password) {
+        if (password == null) {
+            throw new IllegalArgumentException("Password cannot be null");
+        }
         this.password = password;
     }
 
