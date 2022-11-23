@@ -24,7 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import hi.HBV501G.kritikin.persistence.entites.Company;
+import hi.HBV501G.kritikin.persistence.entites.DTOs.ReviewJSON;
 import hi.HBV501G.kritikin.services.CompanyService;
+import hi.HBV501G.kritikin.services.ReviewService;
 
 @RestController
 @CrossOrigin()
@@ -33,6 +35,7 @@ public class CompanyController {
     public static final String APIURL = "/api";
 
     private CompanyService companyService;
+    private ReviewService reviewService;
 
     /**
      * Constructor for the CompanyController which uses Autowired to inject the
@@ -41,8 +44,9 @@ public class CompanyController {
      * @param companyService
      */
     @Autowired
-    public CompanyController(CompanyService companyService) {
+    public CompanyController(CompanyService companyService, ReviewService reviewService) {
         this.companyService = companyService;
+        this.reviewService = reviewService;
     }
 
     /**
@@ -65,7 +69,20 @@ public class CompanyController {
      */
     @GetMapping(value = APIURL + "/company/{id}")
     public ResponseEntity<Company> company(@PathVariable long id) {
-        return ResponseEntity.ok().body(companyService.findById(id));
+        Company foundCompany = companyService.findById(id);
+        List<ReviewJSON> reviews = reviewService.findByCompany(id);
+        
+        if (reviews.isEmpty()) {
+            foundCompany.setStarRating(5.0);
+        } else {
+            double allRatings = 0;
+            for (ReviewJSON reviewJSON : reviews) {
+                allRatings += reviewJSON.getStarRating();
+            }
+            foundCompany.setStarRating(allRatings / reviews.size());
+        }
+        companyService.save(foundCompany);
+        return ResponseEntity.ok().body(foundCompany);
     }
 
     @GetMapping(value = APIURL + "/findCompany/{name}")
