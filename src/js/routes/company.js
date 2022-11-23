@@ -171,6 +171,7 @@ export default function Company(props) {
             <DialogContent>
                 <form id="review-form" onSubmit={submitReview}>
                     <TextField autoFocus margin="dense" id="review-text" name="text" label="Umsögn" type="text" fullWidth multiline />
+                    <Typography variant="subtitle2">Stjörnur</Typography>
                     <StarPicker rating={starPickerRating} setRating={setStarPickerRating} />
                     <DialogActions>
                         <Button onClick={handleCloseReviewDialog}>Hætta við</Button>
