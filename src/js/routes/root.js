@@ -8,12 +8,14 @@ export default function Root(props) {
             <form
                 id="body_search_form"
                 onSubmit={props.search}
+                style={{ textAlign: "center" }}
             >
                 <TextField
                     id="body_search_field"
                     name="search_query"
                     label="Leita …"
                     variant="filled"
+                    sx={{ width: "50%" }}
                 />
             </form>
         </Container>
