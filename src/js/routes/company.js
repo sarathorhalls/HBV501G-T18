@@ -51,6 +51,12 @@ export default function Company(props) {
      */
     async function loadCompany() {
         const response = await props.api.get(`/company/${id}`);
+        response.data.openingHours = response.data.openingHours.split(",");
+        if (response.data.openingHours.length === 7) {
+            response.data.openingHours = response.data.openingHours[new Date().getDay()]
+        } else {
+            response.data.openingHours = response.data.openingHours[0]
+        }
         setCompany(response.data);
         // TODO: throw error if nothing found
     }
