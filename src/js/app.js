@@ -195,14 +195,14 @@ export default function App() {
                 <form
                     id="search_form"
                     onSubmit={search}
+                    style={{ flexGrow: 1 }}
                 >
                     <TextField
                         id="search_field"
                         name="search_query"
                         label="Leita …"
                         variant="standard"
-                        // TODO: fix color
-                        sx={{ flexGrow: 1 }}
+                        sx={{ width: "100%" }}
                     />
                 </form>
                 <Box sx={{ flexGrow: 1 }} />
