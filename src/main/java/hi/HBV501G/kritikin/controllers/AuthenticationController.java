@@ -2,6 +2,7 @@ package hi.HBV501G.kritikin.controllers;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -40,12 +43,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hi.HBV501G.kritikin.persistence.entites.Authority;
 import hi.HBV501G.kritikin.persistence.entites.User;
+import hi.HBV501G.kritikin.services.CompanyService;
 import hi.HBV501G.kritikin.services.UserService;
 
 @RestController
 @CrossOrigin()
 public class AuthenticationController {
+
     private UserService userService;
+    private CompanyService companyService;
+
+    Logger logger = org.slf4j.LoggerFactory.getLogger(AuthenticationController.class);
 
     /**
      * Constructor for the AuthenticationController which uses Autowired to inject
@@ -55,8 +63,9 @@ public class AuthenticationController {
      * @param companyUserService
      */
     @Autowired
-    public AuthenticationController(UserService userService) {
+    public AuthenticationController(UserService userService, CompanyService companyService) {
         this.userService = userService;
+        this.companyService = companyService;
     }
 
     /**
@@ -105,6 +114,22 @@ public class AuthenticationController {
         }
         userService.delete(user);
         return user;
+    }
+
+    @PostMapping(value = CompanyController.APIURL + "/companyUser/{id}")
+    public ResponseEntity<String> redeemAccess(@PathVariable long companyId, @RequestHeader("Authorization") String auth) {
+        logger.info("redeemAccess() called with authorization header: {}", auth);
+        String token = auth.replace("Bearer ", "").split("\\.")[1];
+        String decodedPayload = new String(Base64.getDecoder().decode(token));
+        try {
+            Long userId = Long.parseLong(decodedPayload.split(",")[1].split(":")[1].split("\"")[1]);
+            logger.info("User with id {} and username {} is requesting access to company with id {} and name {}", userId,
+                    userService.findById(userId).getUsername(), companyId, companyService.findById(companyId).getName());
+            return ResponseEntity.ok().body("Access requested");
+        } catch (Exception e) {
+            logger.error("Error parsing user id from token: {}", e.getMessage());
+            return ResponseEntity.badRequest().body("Error parsing user id from token: " + e.getMessage());
+        }
     }
 
     /**
