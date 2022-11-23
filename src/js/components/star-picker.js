@@ -4,6 +4,15 @@ import StarIcon from '@mui/icons-material/Star';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 
 /**
+ * Returns true if n is a plural number in Icelandic, false otherwise
+ * @param {number} n Number to check whether or not is plural
+ * @returns true if the number is plural in Icelandic, false otherwise
+ */
+function plural(n) {
+    return !(n % 10 === 1 && n % 100 !== 11);
+}
+
+/**
  * Props object for the star picker component
  * 
  * @typedef {object} StarPickerProps
@@ -36,6 +45,7 @@ export default function StarPicker(props) {
                         onClick={() => props.setRating(i)}
                         sx={{ cursor: "pointer" }}
                         key={i}
+                        aria-label={`${i} ${plural(i) ? "stjörnur" : "stjarna"}`}
                     />
                 )
                 : (
@@ -44,16 +54,17 @@ export default function StarPicker(props) {
                         onClick={(() => props.setRating(i))}
                         sx={{ cursor: "pointer" }}
                         key={i}
+                        aria-label={`${i} ${plural(i) ? "stjörnur" : "stjarna"}`}
                     />
                 )
         );
     }
 
-    // TODO: add accessible way of reading rating
     return (
         <Box
             // If mouse leaves box, no rating is being hovered over
             onMouseOut={() => setHoverRating(0)}
+            aria-label={`Stjörnugjöf (${hoverRating === 0 ? `${props.rating} ${plural(props.rating) ? "stjörnur valdar" : "stjarna valin"}` : `bendill á ${hoverRating} ${plural(hoverRating) ? "stjörnum" : "stjörnu"}`})`}
         >
             {stars}
         </Box>
