@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import StarIcon from '@mui/icons-material/Star';
 import StarHalfIcon from '@mui/icons-material/StarHalf';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import { plural } from "./star-picker";
 
 export default function StarRating(props) {
     // Array of star icons
@@ -30,9 +31,9 @@ export default function StarRating(props) {
         stars.push(<StarOutlineIcon key={i} />);
     }
 
-    // TODO: add accessible way of reading rating
     return (
-        <Box>
+        <Box
+            aria-label={`Stjörnugjöf (${props.rating} ${plural(props.rating) ? 'stjörnur' : 'stjarna'})`}>
             {stars}
         </Box>
     );

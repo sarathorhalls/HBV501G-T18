@@ -8,7 +8,7 @@ import StarOutlineIcon from '@mui/icons-material/StarOutline';
  * @param {number} n Number to check whether or not is plural
  * @returns true if the number is plural in Icelandic, false otherwise
  */
-function plural(n) {
+export function plural(n) {
     return !(n % 10 === 1 && n % 100 !== 11);
 }
 
