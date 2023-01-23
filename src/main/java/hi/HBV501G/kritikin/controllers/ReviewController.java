@@ -1,5 +1,6 @@
 package hi.HBV501G.kritikin.controllers;
 
+import java.net.URI;
 import java.util.Base64;
 
 /**
@@ -13,6 +14,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import hi.HBV501G.kritikin.persistence.entites.Review;
 import hi.HBV501G.kritikin.persistence.entites.DTOs.ReviewJSON;
@@ -52,8 +55,8 @@ public class ReviewController {
      * @return a list of all reviews for a particular company
      */
     @GetMapping(value = CompanyController.APIURL + "/company/{id}/reviews")
-    public List<ReviewJSON> fetchReviewsByCompany(@PathVariable long id) {
-        return reviewService.findByCompany(id);
+    public ResponseEntity<List<ReviewJSON>> fetchReviewsByCompany(@PathVariable long id) {
+        return ResponseEntity.ok(reviewService.findByCompany(id));
     }
 
     /**
@@ -64,8 +67,8 @@ public class ReviewController {
      * @return a list of all reviews for a particular user
      */
     @GetMapping(value = CompanyController.APIURL + "/user/{id}/reviews")
-    public List<ReviewJSON> fetchReviewsByUser(@PathVariable long id) {
-        return reviewService.findByUser(id);
+    public ResponseEntity<List<ReviewJSON>> fetchReviewsByUser(@PathVariable long id) {
+        return ResponseEntity.ok(reviewService.findByUser(id));
     }
 
     /**
@@ -82,7 +85,7 @@ public class ReviewController {
      * @return the review that was inserted
      */
     @PostMapping(value = CompanyController.APIURL + "/company/{id}/review")
-    public Review addReview(@RequestBody Review review, @PathVariable("id") long companyId,
+    public ResponseEntity<Review> addReview(@RequestBody Review review, @PathVariable("id") long companyId,
             @RequestHeader("Authorization") String auth) {
         logger.info("addReview() called with authorization header: {}", auth);
         String token = auth.replace("Bearer ", "").split("\\.")[1];
@@ -90,10 +93,12 @@ public class ReviewController {
         try {
             Long userId = Long.parseLong(decodedPayload.split(",")[1].split(":")[1].split("\"")[1]);
             logger.info("User id: {}", userId);
-            return reviewService.addReview(review, userId, companyId);
+            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(CompanyController.APIURL + "/company/" + companyId + "/review").toUriString());
+            return ResponseEntity.created(uri).body(reviewService.addReview(review, userId, companyId));
         } catch (Exception e) {
             logger.error("Error parsing user id from token: {}", e.getMessage());
-            return null;
+            return ResponseEntity.badRequest().body(review);
         }
 
     }

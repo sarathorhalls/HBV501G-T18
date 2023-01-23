@@ -75,8 +75,8 @@ public class AuthenticationController {
      * @return a list of all users
      */
     @GetMapping(value = CompanyController.APIURL + "/users")
-    public List<User> fetchAllUsers() {
-        return userService.findAll();
+    public ResponseEntity<List<User>> fetchAllUsers() {
+        return ResponseEntity.ok(userService.findAll());
     }
 
     /**
@@ -107,13 +107,13 @@ public class AuthenticationController {
      * @return the user that was deleted
      */
     @DeleteMapping(value = CompanyController.APIURL + "/users/{id}")
-    public User deleteUser(@PathVariable long id) {
+    public ResponseEntity<User> deleteUser(@PathVariable long id) {
         User user = userService.findById(id);
         if (user == null) {
-            return null;
+            return new ResponseEntity<>(null, null, HttpStatus.BAD_REQUEST);
         }
         userService.delete(user);
-        return user;
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping(value = CompanyController.APIURL + "/companyUser/{companyId}")

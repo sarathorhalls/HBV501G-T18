@@ -1,5 +1,6 @@
 package hi.HBV501G.kritikin.controllers;
 
+import java.net.URI;
 import java.util.Base64;
 
 /**
@@ -13,6 +14,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import hi.HBV501G.kritikin.persistence.entites.Question;
 import hi.HBV501G.kritikin.persistence.entites.DTOs.QuestionJSON;
@@ -53,8 +56,8 @@ public class QuestionController {
      * @return a list of all questions for a particular company
      */
     @GetMapping(value = CompanyController.APIURL + "/company/{id}/questions")
-    public List<QuestionJSON> fetchQuestionsByCompany(@PathVariable long id) {
-        return questionService.findByCompany(id);
+    public ResponseEntity<List<QuestionJSON>> fetchQuestionsByCompany(@PathVariable long id) {
+        return ResponseEntity.ok(questionService.findByCompany(id));
     }
 
     /**
@@ -66,8 +69,8 @@ public class QuestionController {
      * @return a list of all questions for a particular user
      */
     @GetMapping(value = CompanyController.APIURL + "/user/{id}/questions")
-    public List<QuestionJSON> fetchQuestionsByUser(@PathVariable long id) {
-        return questionService.findByUser(id);
+    public ResponseEntity<List<QuestionJSON>> fetchQuestionsByUser(@PathVariable long id) {
+        return ResponseEntity.ok(questionService.findByUser(id));
     }
 
     /**
@@ -84,7 +87,7 @@ public class QuestionController {
      * @return the question that was inserted
      */
     @PostMapping(value = CompanyController.APIURL + "/company/{id}/question")
-    public Question addQuestion(@RequestBody Question question,
+    public ResponseEntity<Question> addQuestion(@RequestBody Question question,
             @PathVariable("id") long companyId, @RequestHeader("Authorization") String auth) {
         logger.info("addQuestion() called with authorization header: {}", auth);
         String token = auth.replace("Bearer ", "").split("\\.")[1];
@@ -92,10 +95,12 @@ public class QuestionController {
         try {
             Long userId = Long.parseLong(decodedPayload.split(",")[1].split(":")[1].split("\"")[1]);
             logger.info("User id: {}", userId);
-            return questionService.addQuestion(question, userId, companyId);
+            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(CompanyController.APIURL + "/company/" + companyId + "/question").toUriString());
+            return ResponseEntity.created(uri).body(questionService.addQuestion(question, userId, companyId));
         } catch (Exception e) {
             logger.error("Error parsing user id from token: {}", e.getMessage());
-            return null;
+            return ResponseEntity.badRequest().body(question);
         }
     }
 
@@ -111,7 +116,8 @@ public class QuestionController {
      * @return the question that was updated
      */
     @PostMapping(value = CompanyController.APIURL + "/question/{id}/answer")
-    public Question addAnswer(@RequestBody String answer, @PathVariable("id") long questionId) {
-        return questionService.addAnswer(answer, questionId);
+    public ResponseEntity<Question> addAnswer(@RequestBody String answer, @PathVariable("id") long questionId) {
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path(CompanyController.APIURL + "/question/" + questionId + "/answer").toUriString());
+        return ResponseEntity.created(uri).body(questionService.addAnswer(answer, questionId));
     }
 }
