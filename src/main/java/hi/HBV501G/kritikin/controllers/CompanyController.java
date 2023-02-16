@@ -174,7 +174,6 @@ public class CompanyController {
             company.setWebsite(updatedCompany.getWebsite());
         }
         companyService.save(company);
-        companyService.save(company);
         return ResponseEntity.noContent().build();
     }
 }
