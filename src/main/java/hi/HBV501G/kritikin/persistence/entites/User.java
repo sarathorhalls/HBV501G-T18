@@ -133,6 +133,10 @@ public class User {
         this.authorities = authorities;
     }
 
+    public void addAuthority(Authority authority) {
+        authorities.add(authority);
+    }
+
     public Company getManagedCompany() {
         return managedCompany;
     }
