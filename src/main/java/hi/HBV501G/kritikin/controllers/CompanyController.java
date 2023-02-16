@@ -1,6 +1,7 @@
 package hi.HBV501G.kritikin.controllers;
 
 import java.net.URI;
+import java.util.Base64;
 
 /**
  * This class is the controller for everythin related to companies. It handles
@@ -11,22 +12,27 @@ import java.net.URI;
 
 import java.util.List;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import hi.HBV501G.kritikin.persistence.entites.Company;
+import hi.HBV501G.kritikin.persistence.entites.DTOs.CompanyDTO;
 import hi.HBV501G.kritikin.persistence.entites.DTOs.ReviewJSON;
 import hi.HBV501G.kritikin.services.CompanyService;
 import hi.HBV501G.kritikin.services.ReviewService;
+import hi.HBV501G.kritikin.services.UserService;
 
 @RestController
 @CrossOrigin()
@@ -34,8 +40,11 @@ public class CompanyController {
 
     public static final String APIURL = "/api";
 
+    Logger logger = org.slf4j.LoggerFactory.getLogger(CompanyController.class);
+
     private CompanyService companyService;
     private ReviewService reviewService;
+    private UserService userService;
 
     /**
      * Constructor for the CompanyController which uses Autowired to inject the
@@ -44,9 +53,10 @@ public class CompanyController {
      * @param companyService
      */
     @Autowired
-    public CompanyController(CompanyService companyService, ReviewService reviewService) {
+    public CompanyController(CompanyService companyService, ReviewService reviewService, UserService userService) {
         this.companyService = companyService;
         this.reviewService = reviewService;
+        this.userService = userService;
     }
 
     /**
@@ -127,5 +137,44 @@ public class CompanyController {
                 .path(APIURL + "/company").toUriString());
         return ResponseEntity.created(uri).body(companyService.save(company));
 
+    }
+
+    @PatchMapping(value = APIURL + "/company/{id}")
+    public ResponseEntity<?> updateCompany(@RequestBody CompanyDTO updatedCompany, @PathVariable("id") long companyId, @RequestHeader("Authorization") String auth) {
+        logger.info("addQuestion() called with authorization header: {}", auth);
+        String token = auth.replace("Bearer ", "").split("\\.")[1];
+        String decodedPayload = new String(Base64.getDecoder().decode(token));
+        Long userId;
+        try {
+            userId = Long.parseLong(decodedPayload.split(",")[1].split(":")[1].split("\"")[1]);
+            logger.info("User id: {}", userId);
+            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(CompanyController.APIURL + "/company/" + companyId + "/question").toUriString());
+        } catch (Exception e) {
+            logger.error("Error parsing user id from token: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        if (companyId != userService.getReferenceById(userId).getManagedCompany().getId()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Company company = companyService.findById(companyId);
+        if (company == null) {
+            return ResponseEntity.notFound().build();
+        }
+        if (updatedCompany.getName() != null && !updatedCompany.getName().equals("")) {
+            company.setName(updatedCompany.getName());
+        }
+        if (updatedCompany.getAddress() != null && !updatedCompany.getAddress().equals("")) {
+            company.setAddress(updatedCompany.getAddress());
+        }
+        if (!(updatedCompany.getPhoneNumber() == 0)) {
+            company.setPhoneNumber(updatedCompany.getPhoneNumber());
+        }
+        if (updatedCompany.getWebsite() != null && !updatedCompany.getWebsite().equals("")) {
+            company.setWebsite(updatedCompany.getWebsite());
+        }
+        companyService.save(company);
+        companyService.save(company);
+        return ResponseEntity.noContent().build();
     }
 }
