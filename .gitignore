@@ -1,5 +1,4 @@
 ### Secrets ###
-application.properties
 docker-compose.yml
 docker-compose-prod.yml
 
