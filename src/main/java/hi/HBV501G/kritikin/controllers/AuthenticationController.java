@@ -28,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,6 +43,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hi.HBV501G.kritikin.persistence.entites.Authority;
+import hi.HBV501G.kritikin.persistence.entites.Company;
+import hi.HBV501G.kritikin.persistence.entites.EAuthority;
 import hi.HBV501G.kritikin.persistence.entites.User;
 import hi.HBV501G.kritikin.services.CompanyService;
 import hi.HBV501G.kritikin.services.UserService;
@@ -176,5 +179,18 @@ public class AuthenticationController {
         } else {
             throw new RuntimeException("Refresh token is missing");
         }
+    }
+
+    @PatchMapping(value = CompanyController.APIURL + "/users/{id}")
+    public ResponseEntity<?> setManagedCompanyToUser(@PathVariable("id") long userId, @RequestBody long companyId) {
+        User user = userService.findById(userId);
+        if (user == null) {
+            return new ResponseEntity<>(null, null, HttpStatus.BAD_REQUEST);
+        }
+        Company company = companyService.findById(companyId);
+        user.setManagedCompany(company);
+        user.addAuthority(new Authority(EAuthority.ROLE_COMPANY));
+        userService.save(user);
+        return ResponseEntity.ok(user);
     }
 }

@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -31,6 +32,10 @@ public class User {
 
     @NonNull
     private String password;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "company_id", referencedColumnName = "id")
+    private Company managedCompany;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "user-review")
@@ -56,7 +61,7 @@ public class User {
     }
 
     public User(String username, String password, List<Review> reviews, List<Question> questions,
-            Collection<Authority> authorities) {
+            Collection<Authority> authorities, Company managedCompany) {
         if (username == null || password == null) {
             throw new IllegalArgumentException("Username and password cannot be null");
         }
@@ -65,6 +70,7 @@ public class User {
         this.reviews = reviews;
         this.questions = questions;
         this.authorities = authorities;
+        this.managedCompany = managedCompany;
     }
 
     public Review addReview(Review review) {
@@ -125,5 +131,17 @@ public class User {
 
     public void setAuthorities(Collection<Authority> authorities) {
         this.authorities = authorities;
+    }
+
+    public void addAuthority(Authority authority) {
+        authorities.add(authority);
+    }
+
+    public Company getManagedCompany() {
+        return managedCompany;
+    }
+
+    public void setManagedCompany(Company managedCompany) {
+        this.managedCompany = managedCompany;
     }
 }
