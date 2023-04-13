@@ -126,7 +126,7 @@ public class CompanyController {
      * @return the inserted company or null if the company already exists
      */
     @PostMapping(value = APIURL + "/company")
-    public ResponseEntity<Company> addCompany(@RequestBody Company company) {
+    public ResponseEntity<Company> addCompany(Company company) {
         if (company == null || company.getName() == null || company.getName().equals("")) {
             return ResponseEntity.badRequest().body(null);
         }
@@ -140,7 +140,7 @@ public class CompanyController {
     }
 
     @PatchMapping(value = APIURL + "/company/{id}")
-    public ResponseEntity<?> updateCompany(@RequestBody CompanyDTO updatedCompany, @PathVariable("id") long companyId, @RequestHeader("Authorization") String auth) {
+    public ResponseEntity<?> updateCompany(CompanyDTO updatedCompany, @PathVariable("id") long companyId, @RequestHeader("Authorization") String auth) {
         logger.info("addQuestion() called with authorization header: {}", auth);
         String token = auth.replace("Bearer ", "").split("\\.")[1];
         String decodedPayload = new String(Base64.getDecoder().decode(token));

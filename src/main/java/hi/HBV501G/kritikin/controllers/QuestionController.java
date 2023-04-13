@@ -87,7 +87,7 @@ public class QuestionController {
      * @return the question that was inserted
      */
     @PostMapping(value = CompanyController.APIURL + "/company/{id}/question")
-    public ResponseEntity<Question> addQuestion(@RequestBody Question question,
+    public ResponseEntity<Question> addQuestion(Question question,
             @PathVariable("id") long companyId, @RequestHeader("Authorization") String auth) {
         logger.info("addQuestion() called with authorization header: {}", auth);
         String token = auth.replace("Bearer ", "").split("\\.")[1];
@@ -116,7 +116,7 @@ public class QuestionController {
      * @return the question that was updated
      */
     @PostMapping(value = CompanyController.APIURL + "/question/{id}/answer")
-    public ResponseEntity<Question> addAnswer(@RequestBody String answer, @PathVariable("id") long questionId) {
+    public ResponseEntity<Question> addAnswer(String answer, @PathVariable("id") long questionId) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path(CompanyController.APIURL + "/question/" + questionId + "/answer").toUriString());
         return ResponseEntity.created(uri).body(questionService.addAnswer(answer, questionId));
     }
