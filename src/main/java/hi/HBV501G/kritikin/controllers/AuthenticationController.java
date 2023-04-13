@@ -91,7 +91,7 @@ public class AuthenticationController {
      * @return the user that was inserted
      */
     @PostMapping(value = CompanyController.APIURL + "/auth/signup")
-    public ResponseEntity<User> addUser(User user) {
+    public ResponseEntity<User> addUser(@RequestBody User user) {
         if (user == null || user.getUsername() == null || user.getUsername().equals("")) {
             return ResponseEntity.badRequest().body(null);
         }
