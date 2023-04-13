@@ -85,7 +85,7 @@ public class ReviewController {
      * @return the review that was inserted
      */
     @PostMapping(value = CompanyController.APIURL + "/company/{id}/review")
-    public ResponseEntity<Review> addReview(@RequestBody Review review, @PathVariable("id") long companyId,
+    public ResponseEntity<Review> addReview(Review review, @PathVariable("id") long companyId,
             @RequestHeader("Authorization") String auth) {
         logger.info("addReview() called with authorization header: {}", auth);
         String token = auth.replace("Bearer ", "").split("\\.")[1];
