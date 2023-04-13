@@ -20,6 +20,7 @@ import BusinessIcon from "@mui/icons-material/Business";
 import { useParams } from "react-router-dom";
 import { StarPicker, StarRating } from "../components";
 import Axios from "axios";
+import qs from "qs";
 
 /**
  * Props object for the company page
@@ -124,17 +125,12 @@ export default function Company(props) {
         const form = event.target;
         const text = form.text.value;
 
-        // Create URL request params from the review data
-        const params = new URLSearchParams();
-        params.append("starRating", starPickerRating);
-        params.append("reviewText", text);
-
         let response;
         try {
             response = await props.api.post(
                 `/company/${id}/review`,
-                params,
-                { headers: { Authorization: `Bearer ${props.authInfo.access_token}` } }
+                qs.stringify({"starRating": starPickerRating, "reviewText": text}),
+                { headers: { Authorization: `Bearer ${props.authInfo.access_token}`, "Content-type": "application/x-www-form-urlencoded" } }
             );
         } catch (e) {
             window.alert("Villa: Tókst ekki að senda umsögn");
@@ -168,8 +164,8 @@ export default function Company(props) {
         try {
             response = await props.api.post(
                 `/company/${id}/question`,
-                params,
-                { headers: { Authorization: `Bearer ${props.authInfo.access_token}` } }
+                qs.stringify({"questionText": text}),
+                { headers: { Authorization: `Bearer ${props.authInfo.access_token}`, "Content-type": "application/x-www-form-urlencoded"  } }
             );
         } catch (e) {
             window.alert("Villa: Tókst ekki að senda spurningu");

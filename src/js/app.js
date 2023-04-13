@@ -20,6 +20,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import jwt_decode from "jwt-decode";
+import qs from "qs";
 
 const api = Axios.create({
     //baseURL: `${window.location.origin}/api`,
@@ -173,14 +174,9 @@ export default function App() {
         const username = form.username.value;
         const password = form.password.value;
 
-        // Create URL search params to sign up with
-        const params = new URLSearchParams();
-        params.append("username", username);
-        params.append("password", password);
-
         let response;
         try {
-            response = await api.post(`/auth/signup`, params);
+            response = await api.post(`/auth/signup`, qs.stringify({ "username": username, "password": password }), { headers: { "Content-Type": "application/x-www-form-urlencoded" } });
         } catch (e) {
             if (e.response) {
                 if (e.response.status === 400) {
