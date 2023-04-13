@@ -22,7 +22,8 @@ import ListItemText from "@mui/material/ListItemText";
 import jwt_decode from "jwt-decode";
 
 const api = Axios.create({
-    baseURL: `${window.location.origin}/api`,
+    //baseURL: `${window.location.origin}/api`,
+    baseURL: `https://hbv501g-t18-production.up.railway.app/api`,
 });
 
 export default function App() {
