@@ -173,9 +173,14 @@ export default function App() {
         const username = form.username.value;
         const password = form.password.value;
 
+        // Create URL search params to sign up with
+        const params = new URLSearchParams();
+        params.append("username", username);
+        params.append("password", password);
+
         let response;
         try {
-            response = await api.post(`/auth/signup`, { username, password });
+            response = await api.post(`/auth/signup`, params);
         } catch (e) {
             if (e.response) {
                 if (e.response.status === 400) {

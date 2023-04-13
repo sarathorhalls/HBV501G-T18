@@ -124,11 +124,16 @@ export default function Company(props) {
         const form = event.target;
         const text = form.text.value;
 
+        // Create URL request params from the review data
+        const params = new URLSearchParams();
+        params.append("starRating", starPickerRating);
+        params.append("reviewText", text);
+
         let response;
         try {
             response = await props.api.post(
                 `/company/${id}/review`,
-                { starRating: starPickerRating, reviewText: text },
+                params,
                 { headers: { Authorization: `Bearer ${props.authInfo.access_token}` } }
             );
         } catch (e) {
@@ -155,11 +160,15 @@ export default function Company(props) {
         const form = event.target;
         const text = form.text.value;
 
+        // Create URL request params from the review data
+        const params = new URLSearchParams();
+        params.append("questionText", text);
+
         let response;
         try {
             response = await props.api.post(
                 `/company/${id}/question`,
-                { questionText: text },
+                params,
                 { headers: { Authorization: `Bearer ${props.authInfo.access_token}` } }
             );
         } catch (e) {
